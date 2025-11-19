@@ -336,27 +336,23 @@
                 <p>Contact: +88 01841-132714</p>
             </div>
             
+            <!-- UPDATED SUBMITTED TO BOX -->
             <div class="address-box">
                 <h3>Submitted to:</h3>
-                <p><strong><input type="text" style="width: 150px; display: inline-block;" placeholder="Enter Name"></strong></p>
-                <p><textarea></textarea></p>
+                <input type="text" id="input-recipient-name" placeholder="Recipient Name (e.g., Mr. Mohammad Abu Kausar)" oninput="syncRecipientData()" style="font-weight: bold; margin-bottom: 5px; border: 1px solid #ccc; padding: 5px; width: 100%;">
+                <textarea id="input-recipient-address" placeholder="Designation&#10;Bank Name&#10;Address Line 1&#10;Address Line 2&#10;Contact Info" oninput="syncRecipientData()" style="height: 120px; width: 100%; border: 1px solid #ccc; padding: 5px; font-family: inherit;"></textarea>
             </div>
         </div>
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
         
         <div style="margin: 30px 0;">
-            <p>Ref.: <input type="text" style="width: 150px; display: inline-block;" placeholder="AMK/EBPLC/2025/....."></p>
+            <p>Ref.: AMK/EBPLC/2025/<input type="text" style="width: 150px; display: inline-block;" placeholder="Enter ref"></p>
             <p>Date: <input type="date" style="width: 200px; display: inline-block;"></p>
         </div>
         
+        <!-- UPDATED LETTER BODY RECIPIENT SECTION -->
         <div style="margin: 20px 0;">
-            <p><strong>Mr. Mohammad Abu Kausar</strong></p>
-            <p>Head, Home Loan, Credit Administration</p>
-            <p>Eastern Bank PLC.</p>
-            <p>Head Office, Z N Tower, Bir Uttam Mir Shawkat Sarak</p>
-            <p>House # 02, Road # 08, Gulshan-1, Dhaka-1212</p>
+            <p><strong id="output-recipient-name"></strong></p>
+            <p id="output-recipient-address" style="white-space: pre-wrap; margin-top: 0; line-height: 1.4;"></p>
         </div>
         
         <div style="margin: 20px 0;">
@@ -804,8 +800,17 @@
                 row.querySelector(".calc-total").value = totalVal.toFixed(2);
             });
         }
+        
+        // --- 2. SYNC RECIPIENT INFO ---
+        function syncRecipientData() {
+            const nameInput = document.getElementById('input-recipient-name');
+            const addressInput = document.getElementById('input-recipient-address');
+            
+            document.getElementById('output-recipient-name').innerText = nameInput.value;
+            document.getElementById('output-recipient-address').innerText = addressInput.value;
+        }
 
-        // --- 2. PREVIEW MODE LOGIC ---
+        // --- 3. PREVIEW MODE LOGIC ---
         function togglePreview() {
             const body = document.body;
             const btnPreview = document.getElementById('btn-preview');
@@ -827,7 +832,7 @@
             }
         }
 
-        // --- 3. DOWNLOAD PDF LOGIC ---
+        // --- 4. DOWNLOAD PDF LOGIC ---
         function downloadPDF() {
             const element = document.getElementById('report-content');
             
@@ -896,11 +901,15 @@
             });
         }
 
-        // --- 4. CLEAR FORM LOGIC ---
+        // --- 5. CLEAR FORM LOGIC ---
         function clearForm() {
             if(confirm("Are you sure you want to clear all data?")) {
                 const inputs = document.querySelectorAll("input, textarea, select");
                 inputs.forEach(input => input.value = "");
+                
+                // Reset outputs
+                document.getElementById('output-recipient-name').innerText = "";
+                document.getElementById('output-recipient-address').innerText = "";
             }
         }
     </script>
