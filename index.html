@@ -34,32 +34,30 @@
             padding: 20mm; /* Standard Margins */
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
             position: relative;
+            display: flex;
+            flex-direction: column;
         }
 
-        /* --- LETTERHEAD STYLES --- */
-        .letterhead {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #333;
-            padding-bottom: 15px;
+        /* --- HEADER & FOOTER IMAGE STYLES --- */
+        .report-header-img {
+            width: 100%;
+            height: auto; /* Maintains aspect ratio */
+            max-height: 150px; /* Prevents it from taking too much space */
+            object-fit: contain;
+            display: block;
+            margin-bottom: 20px;
         }
 
-        .company-name {
-            font-size: 28px;
-            font-weight: bold;
-            text-transform: uppercase;
-            color: #1a1a1a;
-            margin: 0 0 5px 0;
-            letter-spacing: 1px;
+        .report-footer-img {
+            width: 100%;
+            height: auto;
+            max-height: 100px;
+            object-fit: contain;
+            display: block;
+            margin-top: auto; /* Pushes footer to bottom if flex container allows */
+            padding-top: 20px;
         }
 
-        .company-details {
-            font-size: 12px;
-            color: #444;
-            margin: 2px 0;
-            font-family: Arial, sans-serif; /* Often address text is cleaner in Sans */
-        }
-        
         /* Report Title */
         h1.report-title {
             text-align: center;
@@ -173,7 +171,6 @@
         }
 
         /* --- PREVIEW MODE STYLES --- */
-        /* When the body has class 'preview-mode', inputs look like text */
         body.preview-mode input, 
         body.preview-mode textarea, 
         body.preview-mode select {
@@ -181,7 +178,7 @@
             background: transparent;
             padding: 0;
             resize: none;
-            appearance: none; /* Remove drop arrow on selects */
+            appearance: none;
             -webkit-appearance: none;
             font-weight: bold;
             color: #000;
@@ -254,7 +251,6 @@
                 border: none;
                 height: 0;
             }
-            /* In case user prints via browser menu instead of button */
             input, textarea, select {
                 border: none !important;
                 background: transparent !important;
@@ -268,12 +264,18 @@
     <!-- THE REPORT CONTENT STARTS HERE -->
     <div class="container" id="report-content">
         
-        <!-- LETTERHEAD SECTION -->
-        <div class="letterhead">
-            <div class="company-name">AMK Associates Limited</div>
-            <div class="company-details">68, Khilgaon Chowdhury Para (4th floor), DIT Road, Rampura, Dhaka-1219, Bangladesh. Phone: +880 01847132700-04</div>
-            <div class="company-details">E-mail: amkassociatesbd@gmail.com, Web: www.amkassociatesbd.com</div>
-        </div>
+        <!-- ================================================================================== -->
+        <!-- HEADER IMAGE START - PAGE 1 -->
+        <!-- INSTRUCTION: Replace 'PASTE_YOUR_HEADER_LINK_HERE' below with your actual Image URL -->
+        <!-- Example: src="https://raw.githubusercontent.com/your-username/repo/main/header.png" -->
+        <!-- ================================================================================== -->
+        
+        <img src="PASTE_YOUR_HEADER_LINK_HERE" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+        
+        <!-- ================================================================================== -->
+        <!-- HEADER IMAGE END -->
+        <!-- ================================================================================== -->
+
 
         <h1 class="report-title">INSPECTION SURVEY & VALUATION REPORT</h1>
         
@@ -336,7 +338,7 @@
                 <p>Contact: +88 01841-132714</p>
             </div>
             
-            <!-- UPDATED SUBMITTED TO BOX -->
+            <!-- SUBMITTED TO BOX -->
             <div class="address-box">
                 <h3>Submitted to:</h3>
                 <input type="text" id="input-recipient-name" placeholder="Recipient Name (e.g., Mr. Mohammad Abu Kausar)" oninput="syncRecipientData()" style="font-weight: bold; margin-bottom: 5px; border: 1px solid #ccc; padding: 5px; width: 100%;">
@@ -349,7 +351,7 @@
             <p>Date: <input type="date" style="width: 200px; display: inline-block;"></p>
         </div>
         
-        <!-- UPDATED LETTER BODY RECIPIENT SECTION -->
+        <!-- LETTER BODY RECIPIENT SECTION -->
         <div style="margin: 20px 0;">
             <p><strong id="output-recipient-name"></strong></p>
             <p id="output-recipient-address" style="white-space: pre-wrap; margin-top: 0; line-height: 1.4;"></p>
@@ -450,16 +452,30 @@
             </ol>
         </div>
         
+        <!-- ================================================================================== -->
+        <!-- FOOTER IMAGE START - PAGE 1 -->
+        <!-- INSTRUCTION: Replace 'PASTE_YOUR_FOOTER_LINK_HERE' below with your actual Image URL -->
+        <!-- ================================================================================== -->
+        
+        <img src="PASTE_YOUR_FOOTER_LINK_HERE" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
+
+        <!-- ================================================================================== -->
+        <!-- FOOTER IMAGE END -->
+        <!-- ================================================================================== -->
+
         <!-- Page Break for PDF -->
         <div class="page-break"></div>
         
-        <!-- SUMMARY SHEET PAGE -->
-        <!-- REPEAT LETTERHEAD FOR SUMMARY PAGE (Optional, typically used on first page only, but adding for completeness if needed) -->
-         <div class="letterhead">
-            <div class="company-name">AMK Associates Limited</div>
-            <div class="company-details">68, Khilgaon Chowdhury Para (4th floor), DIT Road, Rampura, Dhaka-1219, Bangladesh. Phone: +880 01847132700-04</div>
-            <div class="company-details">E-mail: amkassociatesbd@gmail.com, Web: www.amkassociatesbd.com</div>
-        </div>
+        <!-- ================================================================================== -->
+        <!-- HEADER IMAGE START - PAGE 2 (SUMMARY) -->
+        <!-- INSTRUCTION: Replace 'PASTE_YOUR_HEADER_LINK_HERE' below with your actual Image URL -->
+        <!-- ================================================================================== -->
+        
+        <img src="PASTE_YOUR_HEADER_LINK_HERE" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+        
+        <!-- ================================================================================== -->
+        <!-- HEADER IMAGE END -->
+        <!-- ================================================================================== -->
 
         <h2>Summary of the Valuation Report</h2>
         
