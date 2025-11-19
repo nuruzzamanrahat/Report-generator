@@ -3,10 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EBL Valuation Report Generator</title>
+    <title>EBL Valuation Report Generator - PDF Version</title>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- jsPDF AutoTable for tables -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    
+    <!-- html2canvas for converting HTML to canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <!-- html2pdf for easy HTML to PDF conversion -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     
     <style>
         /* Custom scrollbar */
@@ -25,48 +37,70 @@
             background: #555;
         }
         
-        /* Print/Export styles */
-        @media print {
-            body { margin: 0; }
-            .no-print { display: none !important; }
-        }
-        
-        /* Word document styles */
-        @page {
-            size: A4;
-            margin: 1in;
-        }
-        
-        .word-content {
+        /* Report styles for PDF generation */
+        #reportContent {
+            display: none;
+            background: white;
+            padding: 40px;
             font-family: 'Times New Roman', serif;
             font-size: 12pt;
             line-height: 1.5;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
         }
         
-        .word-table {
+        #reportContent h1 {
+            text-align: center;
+            font-size: 14pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 20px 0;
+        }
+        
+        #reportContent h2 {
+            font-size: 12pt;
+            font-weight: bold;
+            text-decoration: underline;
+            margin: 15px 0 10px 0;
+        }
+        
+        #reportContent table {
             border-collapse: collapse;
             width: 100%;
             margin: 10px 0;
         }
         
-        .word-table td, .word-table th {
+        #reportContent td, #reportContent th {
             border: 1px solid #000;
             padding: 5px;
             text-align: left;
+            font-size: 10pt;
         }
         
-        .word-table th {
+        #reportContent th {
             font-weight: bold;
+            background-color: #f0f0f0;
+        }
+        
+        #reportContent .no-border td {
+            border: none;
+        }
+        
+        #reportContent .page-break {
+            page-break-after: always;
+            margin-top: 50px;
         }
     </style>
 </head>
 <body class="bg-gray-50">
     <!-- Main Container -->
-    <div class="container mx-auto px-4 py-8 max-w-7xl no-print">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
         <!-- Header -->
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
             <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">INSPECTION, SURVEY & VALUATION REPORT</h1>
             <p class="text-center text-gray-600">Eastern Bank PLC - Home Loan Template</p>
+            <p class="text-center text-sm text-red-600 mt-2">PDF Generator Version - Works on GitHub Pages</p>
         </div>
 
         <!-- Form Sections -->
@@ -183,12 +217,18 @@
 
             <!-- Buttons -->
             <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="flex justify-center space-x-4">
-                    <button onclick="generateReport()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center">
+                <div class="flex justify-center space-x-4 flex-wrap gap-4">
+                    <button onclick="generatePDF()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Download PDF Report
+                    </button>
+                    <button onclick="generateSimplePDF()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                         </svg>
-                        Create Report
+                        Simple PDF (Alternative)
                     </button>
                     <button onclick="clearForm()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center">
                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -197,9 +237,15 @@
                         Clear Form
                     </button>
                 </div>
+                <p class="text-center text-sm text-gray-600 mt-4">
+                    If "Download PDF Report" doesn't work, try "Simple PDF (Alternative)"
+                </p>
             </div>
         </div>
     </div>
+
+    <!-- Hidden Report Content for PDF Generation -->
+    <div id="reportContent"></div>
 
     <script>
         // Auto-calculate valuation values
@@ -237,283 +283,312 @@
             }
         }
         
-        // Generate Word document using HTML export
-        function generateReport() {
-            // Get form values
-            const getValue = (id) => document.getElementById(id)?.value || '';
+        // Get form value helper
+        function getValue(id) {
+            return document.getElementById(id)?.value || '';
+        }
+        
+        // Generate PDF using html2pdf
+        function generatePDF() {
+            // Create the HTML content
+            const reportHTML = generateReportHTML();
+            document.getElementById('reportContent').innerHTML = reportHTML;
+            document.getElementById('reportContent').style.display = 'block';
             
-            // Create the Word document HTML content
-            const htmlContent = `
-            <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
-            <head>
-                <meta charset='utf-8'>
-                <title>Inspection Survey Valuation Report</title>
-                <style>
-                    @page {
-                        size: 8.5in 11.0in;
-                        margin: 1.0in 1.0in 1.0in 1.0in;
-                        mso-header-margin: .5in;
-                        mso-footer-margin: .5in;
-                        mso-paper-source: 0;
-                    }
-                    body {
-                        font-family: 'Times New Roman', serif;
-                        font-size: 12pt;
-                        line-height: 1.5;
-                        color: #000000;
-                    }
-                    h1 {
-                        text-align: center;
-                        font-size: 14pt;
-                        font-weight: bold;
-                        text-decoration: underline;
-                        margin: 20px 0;
-                    }
-                    h2 {
-                        font-size: 12pt;
-                        font-weight: bold;
-                        text-decoration: underline;
-                        margin: 15px 0 10px 0;
-                    }
-                    table {
-                        border-collapse: collapse;
-                        width: 100%;
-                        margin: 10px 0;
-                    }
-                    td, th {
-                        border: 1px solid #000000;
-                        padding: 5px;
-                        text-align: left;
-                        font-size: 11pt;
-                    }
-                    th {
-                        font-weight: bold;
-                        background-color: #f0f0f0;
-                    }
-                    .no-border {
-                        border: none;
-                    }
-                    .center {
-                        text-align: center;
-                    }
-                    .bold {
-                        font-weight: bold;
-                    }
-                    .page-break {
-                        page-break-after: always;
-                    }
-                    p {
-                        margin: 10px 0;
-                    }
-                </style>
-            </head>
-            <body>
-                <h1>INSPECTION, SURVEY & VALUATION REPORT</h1>
-                
-                <table>
-                    <tr>
-                        <td class="bold" width="30%">Reference Account Name</td>
-                        <td width="5%">:</td>
-                        <td>${getValue('refAccountName')}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">Reference No.</td>
-                        <td>:</td>
-                        <td>${getValue('refNumber')}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">W/O Received Date</td>
-                        <td>:</td>
-                        <td>${getValue('woReceivedDate')}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">Date of Inspection</td>
-                        <td>:</td>
-                        <td>${getValue('inspectionDate')}</td>
-                    </tr>
-                </table>
-                
-                <br>
-                
-                <table>
-                    <tr>
-                        <td class="bold" width="30%">Surveyor Name</td>
-                        <td width="5%">:</td>
-                        <td>${getValue('surveyorName')}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">Designation</td>
-                        <td>:</td>
-                        <td>${getValue('designation')}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">NID Number</td>
-                        <td>:</td>
-                        <td>${getValue('nidNumber')}</td>
-                    </tr>
-                    <tr>
-                        <td class="bold">Contact Number</td>
-                        <td>:</td>
-                        <td>${getValue('contactNumber')}</td>
-                    </tr>
-                </table>
-                
-                <br>
-                
-                <table>
-                    <tr>
-                        <td width="50%" style="vertical-align: top;">
-                            <p class="bold">Submitted by:</p>
-                            <p><strong>AMK Associates Limited</strong></p>
-                            <p>68, Khilgaon Chowdhurypara (4th floor)</p>
-                            <p>DIT Road, Rampura, Dhaka-1219</p>
-                            <p>E-mail: amkassociatesbd@gmail.com</p>
-                            <p>Website: www.amkassociatesltd.com</p>
-                            <p>Contact: +88 01841-132714</p>
-                        </td>
-                        <td width="50%" style="vertical-align: top;">
-                            <p class="bold">Submitted to:</p>
-                            <p><strong>Mr. Mohammad Abu Kausar</strong></p>
-                            <p>Head, Home Loan, Credit Administration</p>
-                            <p>Eastern Bank PLC.</p>
-                            <p>Head Office</p>
-                            <p>Z N Tower, Bir Uttam Mir Shawkat Sarak</p>
-                            <p>House # 02, Road # 08,</p>
-                            <p>Gulshan-1, Dhaka-1212</p>
-                            <p>Contact: +88 01830-302971</p>
-                        </td>
-                    </tr>
-                </table>
-                
-                <br>
-                
-                <p>Ref.: AMK/EBPLC/2025/${getValue('amkRef')}</p>
-                <p>Date: ${getValue('reportDate')}</p>
-                
-                <br>
-                
-                <p><strong>Mr. Mohammad Abu Kausar</strong></p>
-                <p>Head, Home Loan, Credit Administration</p>
-                <p>Eastern Bank PLC.</p>
-                <p>Head Office, Z N Tower, Bir Uttam Mir Shawkat Sarak</p>
-                <p>House # 02, Road # 08, Gulshan-1, Dhaka-1212</p>
-                
-                <br>
-                
-                <p><strong>Subject: Inspection, Survey & Valuation Report on Land with Building</strong></p>
-                <p><strong>Ref. A/C Name: ${getValue('subjectACName')}</strong></p>
-                
-                <br>
-                
-                <p>Dear Sir,</p>
-                <p>Greetings from AMK Associates Limited and Thank You very much for referring us!</p>
-                <p>Pursuant to your communication, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
-                
-                <br>
-                
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Total Land Area<br>(Decimal)</th>
-                            <th>Present Rate per<br>Decimal (BDT)</th>
-                            <th>Land Value<br>(BDT)</th>
-                            <th>Building Value<br>(BDT)</th>
-                            <th>Total Value<br>(BDT)</th>
-                        </tr>
-                        <tr>
-                            <th></th>
-                            <th style="font-style: italic;">a</th>
-                            <th style="font-style: italic;">b</th>
-                            <th style="font-style: italic;">c=a*b</th>
-                            <th style="font-style: italic;">d</th>
-                            <th style="font-style: italic;">e=c+d</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Present Market Value</td>
-                            <td>${getValue('pmvLandArea')}</td>
-                            <td>${getValue('pmvRate')}</td>
-                            <td>${getValue('pmvLandValue')}</td>
-                            <td>${getValue('pmvBuildingValue')}</td>
-                            <td>${getValue('pmvTotalValue')}</td>
-                        </tr>
-                        <tr>
-                            <td>Forced Sale Value<br>(20% less to Present Market Value)</td>
-                            <td>${getValue('fsvLandArea')}</td>
-                            <td>${getValue('fsvRate')}</td>
-                            <td>${getValue('fsvLandValue')}</td>
-                            <td>${getValue('fsvBuildingValue')}</td>
-                            <td>${getValue('fsvTotalValue')}</td>
-                        </tr>
-                        <tr>
-                            <td>Mouza Value</td>
-                            <td>${getValue('mvLandArea')}</td>
-                            <td>${getValue('mvRate')}</td>
-                            <td>${getValue('mvLandValue')}</td>
-                            <td>${getValue('mvBuildingValue')}</td>
-                            <td>${getValue('mvTotalValue')}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <br>
-                
-                <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
-                <p>Detail Report and necessary attachments are enclosed herewith for your record and perusal.</p>
-                <p>For any query, please feel free to contact us.</p>
-                <p>With best regards,</p>
-                
-                <br><br>
-                
-                <table style="border: none;">
-                    <tr>
-                        <td style="border: none; width: 40%;">
-                            <p>Engr. Abdullah Al Rafi</p>
-                            <p>Executive- Inspection, Survey & Valuation</p>
-                        </td>
-                        <td style="border: none; width: 20%;"></td>
-                        <td style="border: none; width: 40%;">
-                            <p>Md. Rashed Hossain</p>
-                            <p>Manager & Unit-In-Charge: ISV</p>
-                        </td>
-                    </tr>
-                </table>
-                
-                <br>
-                
-                <p><strong>Encl:</strong></p>
-                <ol>
-                    <li>Annexure-I: Photograph of Property</li>
-                    <li>Annexure-II: Hand Sketch Map</li>
-                    <li>Annexure-III: Mouza Map</li>
-                    <li>Annexure-IV: Location on Google Map</li>
-                    <li>Annexure-V: QR Code for video of the Property</li>
-                    <li>Annexure-VI: QR Code for Map of the Property</li>
-                    <li>Annexure-VII: SRO Mouza Value</li>
-                    <li>Annexure-VIII: Status In Area Master Plan</li>
-                </ol>
-            </body>
-            </html>`;
+            // Configure PDF options
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: `EBL_Valuation_Report_${new Date().toISOString().slice(0, 10)}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak: { mode: 'avoid-all', before: '.page-break' }
+            };
             
-            // Create a Blob with the HTML content
-            const blob = new Blob(['\ufeff', htmlContent], {
-                type: 'application/msword'
+            // Generate PDF
+            html2pdf().set(opt).from(document.getElementById('reportContent')).save().then(() => {
+                document.getElementById('reportContent').style.display = 'none';
+            });
+        }
+        
+        // Generate Simple PDF using jsPDF
+        function generateSimplePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Set font
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            
+            // Title
+            doc.text('INSPECTION, SURVEY & VALUATION REPORT', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            
+            let y = 35;
+            
+            // Reference Details
+            doc.setFont('helvetica', 'bold');
+            doc.text('Reference Details', 20, y);
+            doc.setFont('helvetica', 'normal');
+            y += 7;
+            doc.text(`Reference Account Name: ${getValue('refAccountName')}`, 20, y);
+            y += 6;
+            doc.text(`Reference No.: ${getValue('refNumber')}`, 20, y);
+            y += 6;
+            doc.text(`W/O Received Date: ${getValue('woReceivedDate')}`, 20, y);
+            y += 6;
+            doc.text(`Date of Inspection: ${getValue('inspectionDate')}`, 20, y);
+            
+            y += 10;
+            
+            // Surveyor Information
+            doc.setFont('helvetica', 'bold');
+            doc.text('Surveyor Information', 20, y);
+            doc.setFont('helvetica', 'normal');
+            y += 7;
+            doc.text(`Surveyor Name: ${getValue('surveyorName')}`, 20, y);
+            y += 6;
+            doc.text(`Designation: ${getValue('designation')}`, 20, y);
+            y += 6;
+            doc.text(`NID Number: ${getValue('nidNumber')}`, 20, y);
+            y += 6;
+            doc.text(`Contact Number: ${getValue('contactNumber')}`, 20, y);
+            
+            y += 10;
+            
+            // Submitted by and to
+            doc.setFont('helvetica', 'bold');
+            doc.text('Submitted by:', 20, y);
+            doc.setFont('helvetica', 'normal');
+            y += 6;
+            doc.text('AMK Associates Limited', 20, y);
+            y += 5;
+            doc.text('68, Khilgaon Chowdhurypara (4th floor)', 20, y);
+            y += 5;
+            doc.text('DIT Road, Rampura, Dhaka-1219', 20, y);
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text('Submitted to:', 110, y - 15);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Mr. Mohammad Abu Kausar', 110, y - 9);
+            doc.text('Eastern Bank PLC.', 110, y - 4);
+            
+            y += 15;
+            
+            // Subject
+            doc.text(`Ref.: AMK/EBPLC/2025/${getValue('amkRef')}`, 20, y);
+            y += 6;
+            doc.text(`Date: ${getValue('reportDate')}`, 20, y);
+            y += 10;
+            
+            doc.setFont('helvetica', 'bold');
+            doc.text(`Subject: Inspection, Survey & Valuation Report on Land with Building`, 20, y);
+            y += 6;
+            doc.text(`Ref. A/C Name: ${getValue('subjectACName')}`, 20, y);
+            
+            y += 10;
+            doc.setFont('helvetica', 'normal');
+            doc.text('Dear Sir,', 20, y);
+            y += 6;
+            doc.text('Greetings from AMK Associates Limited!', 20, y);
+            y += 10;
+            
+            // Valuation Table
+            doc.setFont('helvetica', 'bold');
+            doc.text('Valuation Summary:', 20, y);
+            y += 7;
+            
+            // Create table using autoTable
+            doc.autoTable({
+                startY: y,
+                head: [['Description', 'Land Area', 'Rate/Dec', 'Land Value', 'Building Value', 'Total Value']],
+                body: [
+                    ['Present Market Value', getValue('pmvLandArea'), getValue('pmvRate'), getValue('pmvLandValue'), getValue('pmvBuildingValue'), getValue('pmvTotalValue')],
+                    ['Forced Sale Value', getValue('fsvLandArea'), getValue('fsvRate'), getValue('fsvLandValue'), getValue('fsvBuildingValue'), getValue('fsvTotalValue')],
+                    ['Mouza Value', getValue('mvLandArea'), getValue('mvRate'), getValue('mvLandValue'), getValue('mvBuildingValue'), getValue('mvTotalValue')]
+                ],
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 2 },
+                headStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0] }
             });
             
-            // Create a download link
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            const today = new Date().toISOString().slice(0, 10);
-            link.download = `EBL_Valuation_Report_${today}.doc`;
-            
-            // Trigger the download
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            
-            alert('Report generated successfully! The file will open in Microsoft Word.');
+            // Save the PDF
+            const fileName = `EBL_Valuation_Report_${new Date().toISOString().slice(0, 10)}.pdf`;
+            doc.save(fileName);
+        }
+        
+        // Generate Report HTML for PDF
+        function generateReportHTML() {
+            return `
+                <div style="font-family: 'Times New Roman', serif; font-size: 12pt;">
+                    <h1>INSPECTION, SURVEY & VALUATION REPORT</h1>
+                    
+                    <table>
+                        <tr>
+                            <td style="font-weight: bold; width: 30%;">Reference Account Name</td>
+                            <td style="width: 5%;">:</td>
+                            <td>${getValue('refAccountName')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Reference No.</td>
+                            <td>:</td>
+                            <td>${getValue('refNumber')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">W/O Received Date</td>
+                            <td>:</td>
+                            <td>${getValue('woReceivedDate')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Date of Inspection</td>
+                            <td>:</td>
+                            <td>${getValue('inspectionDate')}</td>
+                        </tr>
+                    </table>
+                    
+                    <br>
+                    
+                    <table>
+                        <tr>
+                            <td style="font-weight: bold; width: 30%;">Surveyor Name</td>
+                            <td style="width: 5%;">:</td>
+                            <td>${getValue('surveyorName')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Designation</td>
+                            <td>:</td>
+                            <td>${getValue('designation')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">NID Number</td>
+                            <td>:</td>
+                            <td>${getValue('nidNumber')}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-weight: bold;">Contact Number</td>
+                            <td>:</td>
+                            <td>${getValue('contactNumber')}</td>
+                        </tr>
+                    </table>
+                    
+                    <br>
+                    
+                    <table class="no-border">
+                        <tr>
+                            <td style="vertical-align: top; width: 50%; border: 1px solid #000; padding: 10px;">
+                                <strong>Submitted by:</strong><br>
+                                <strong>AMK Associates Limited</strong><br>
+                                68, Khilgaon Chowdhurypara (4th floor)<br>
+                                DIT Road, Rampura, Dhaka-1219<br>
+                                E-mail: amkassociatesbd@gmail.com<br>
+                                Website: www.amkassociatesltd.com<br>
+                                Contact: +88 01841-132714
+                            </td>
+                            <td style="vertical-align: top; width: 50%; border: 1px solid #000; padding: 10px;">
+                                <strong>Submitted to:</strong><br>
+                                <strong>Mr. Mohammad Abu Kausar</strong><br>
+                                Head, Home Loan, Credit Administration<br>
+                                Eastern Bank PLC.<br>
+                                Head Office<br>
+                                Z N Tower, Bir Uttam Mir Shawkat Sarak<br>
+                                House # 02, Road # 08,<br>
+                                Gulshan-1, Dhaka-1212<br>
+                                Contact: +88 01830-302971
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <p>Ref.: AMK/EBPLC/2025/${getValue('amkRef')}</p>
+                    <p>Date: ${getValue('reportDate')}</p>
+                    
+                    <p><strong>Mr. Mohammad Abu Kausar</strong><br>
+                    Head, Home Loan, Credit Administration<br>
+                    Eastern Bank PLC.<br>
+                    Head Office, Z N Tower, Bir Uttam Mir Shawkat Sarak<br>
+                    House # 02, Road # 08, Gulshan-1, Dhaka-1212</p>
+                    
+                    <p><strong>Subject: Inspection, Survey & Valuation Report on Land with Building</strong><br>
+                    <strong>Ref. A/C Name: ${getValue('subjectACName')}</strong></p>
+                    
+                    <p>Dear Sir,</p>
+                    <p>Greetings from AMK Associates Limited and Thank You very much for referring us!</p>
+                    <p>Pursuant to your communication, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Total Land Area<br>(Decimal)</th>
+                                <th>Present Rate per<br>Decimal (BDT)</th>
+                                <th>Land Value<br>(BDT)</th>
+                                <th>Building Value<br>(BDT)</th>
+                                <th>Total Value<br>(BDT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Present Market Value</td>
+                                <td>${getValue('pmvLandArea')}</td>
+                                <td>${getValue('pmvRate')}</td>
+                                <td>${getValue('pmvLandValue')}</td>
+                                <td>${getValue('pmvBuildingValue')}</td>
+                                <td>${getValue('pmvTotalValue')}</td>
+                            </tr>
+                            <tr>
+                                <td>Forced Sale Value<br>(20% less to Present Market Value)</td>
+                                <td>${getValue('fsvLandArea')}</td>
+                                <td>${getValue('fsvRate')}</td>
+                                <td>${getValue('fsvLandValue')}</td>
+                                <td>${getValue('fsvBuildingValue')}</td>
+                                <td>${getValue('fsvTotalValue')}</td>
+                            </tr>
+                            <tr>
+                                <td>Mouza Value</td>
+                                <td>${getValue('mvLandArea')}</td>
+                                <td>${getValue('mvRate')}</td>
+                                <td>${getValue('mvLandValue')}</td>
+                                <td>${getValue('mvBuildingValue')}</td>
+                                <td>${getValue('mvTotalValue')}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
+                    <p>Detail Report and necessary attachments are enclosed herewith for your record and perusal.</p>
+                    <p>For any query, please feel free to contact us.</p>
+                    <p>With best regards,</p>
+                    
+                    <br><br>
+                    
+                    <table class="no-border">
+                        <tr>
+                            <td style="border: none; width: 40%;">
+                                Engr. Abdullah Al Rafi<br>
+                                Executive- Inspection, Survey & Valuation
+                            </td>
+                            <td style="border: none; width: 20%;"></td>
+                            <td style="border: none; width: 40%;">
+                                Md. Rashed Hossain<br>
+                                Manager & Unit-In-Charge: ISV
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <p><strong>Encl:</strong></p>
+                    <ol>
+                        <li>Annexure-I: Photograph of Property</li>
+                        <li>Annexure-II: Hand Sketch Map</li>
+                        <li>Annexure-III: Mouza Map</li>
+                        <li>Annexure-IV: Location on Google Map</li>
+                        <li>Annexure-V: QR Code for video of the Property</li>
+                        <li>Annexure-VI: QR Code for Map of the Property</li>
+                        <li>Annexure-VII: SRO Mouza Value</li>
+                        <li>Annexure-VIII: Status In Area Master Plan</li>
+                    </ol>
+                </div>
+            `;
         }
     </script>
 </body>
