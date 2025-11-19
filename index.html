@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBL Valuation Report Generator</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- docx library -->
+    <script src="https://unpkg.com/docx@8.5.0/build/index.js"></script>
+    
+    <!-- FileSaver for downloading files -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Main Container -->
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <h1 class="text-3xl font-bold text-center text-gray-800 mb-2">INSPECTION, SURVEY & VALUATION REPORT</h1>
+            <p class="text-center text-gray-600">Eastern Bank PLC - Home Loan Template</p>
+        </div>
+
+        <!-- Form Sections -->
+        <div class="space-y-6">
+            <!-- Reference Details -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Reference Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Reference Account Name</label>
+                        <input type="text" id="refAccountName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Reference No.</label>
+                        <input type="text" id="refNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">W/O Received Date</label>
+                        <input type="date" id="woReceivedDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Date of Inspection</label>
+                        <input type="date" id="inspectionDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Surveyor Information -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Surveyor Information</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Surveyor Name</label>
+                        <input type="text" id="surveyorName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                        <input type="text" id="designation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">NID Number</label>
+                        <input type="text" id="nidNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
+                        <input type="text" id="contactNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Letter Details -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Letter Details</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">AMK Reference Number</label>
+                        <input type="text" id="amkRef" placeholder="e.g., 001" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Report Date</label>
+                        <input type="date" id="reportDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Subject A/C Name</label>
+                        <input type="text" id="subjectACName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Valuation Summary -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Valuation Summary</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border-collapse border border-gray-300">
+                        <thead>
+                            <tr class="bg-gray-100">
+                                <th class="border border-gray-300 px-4 py-2 text-left">Description</th>
+                                <th class="border border-gray-300 px-4 py-2">Land Area (Decimal)</th>
+                                <th class="border border-gray-300 px-4 py-2">Rate per Decimal (BDT)</th>
+                                <th class="border border-gray-300 px-4 py-2">Land Value (BDT)</th>
+                                <th class="border border-gray-300 px-4 py-2">Building Value (BDT)</th>
+                                <th class="border border-gray-300 px-4 py-2">Total Value (BDT)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">Present Market Value</td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="pmvLandArea" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="pmvRate" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="pmvLandValue" class="w-full px-2 py-1 border-0 bg-gray-50" readonly></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="pmvBuildingValue" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="pmvTotalValue" class="w-full px-2 py-1 border-0 bg-gray-50" readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">Forced Sale Value (20% less)</td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="fsvLandArea" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="fsvRate" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="fsvLandValue" class="w-full px-2 py-1 border-0 bg-gray-50" readonly></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="fsvBuildingValue" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="fsvTotalValue" class="w-full px-2 py-1 border-0 bg-gray-50" readonly></td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2">Mouza Value</td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="mvLandArea" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="mvRate" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="mvLandValue" class="w-full px-2 py-1 border-0 bg-gray-50" readonly></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="mvBuildingValue" class="w-full px-2 py-1 border-0 focus:ring-1 focus:ring-blue-500" onchange="calculateValues()"></td>
+                                <td class="border border-gray-300 px-2 py-2"><input type="number" id="mvTotalValue" class="w-full px-2 py-1 border-0 bg-gray-50" readonly></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Summary of Valuation Report -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">Summary of Valuation Report</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">File receiving date</label>
+                        <input type="date" id="fileReceivingDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Valuation Ref No.</label>
+                        <input type="text" id="valuationRefNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Valuation date</label>
+                        <input type="date" id="valuationDate" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Property location</label>
+                        <input type="text" id="propertyLocation" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Valuation conducted by</label>
+                        <textarea id="valuationConductedBy" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type of property</label>
+                        <select id="typeOfProperty" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Select type</option>
+                            <option value="Freehold">Freehold</option>
+                            <option value="Leasehold">Leasehold</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Type of Property seller</label>
+                        <input type="text" id="propertySeller" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Current Market Value (BDT)</label>
+                        <input type="number" id="currentMarketValue" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Forced Sale Value (BDT)</label>
+                        <input type="number" id="forcedSaleValue" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Deviation (Plinth) %</label>
+                        <input type="number" id="deviationPlinth" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Deviation (Floor) Range</label>
+                        <input type="text" id="deviationFloor" placeholder="e.g., 1 to 5" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- A. Particulars of Account -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">A. Particulars of Account</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">A/C Name</label>
+                        <input type="text" id="accountName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Nature of Business</label>
+                        <input type="text" id="natureOfBusiness" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Office/Business Address</label>
+                        <textarea id="officeAddress" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Factory Address</label>
+                        <textarea id="factoryAddress" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Age of Business</label>
+                        <input type="text" id="ageOfBusiness" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Organization Type</label>
+                        <input type="text" id="organizationType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contact Person Name</label>
+                        <input type="text" id="contactPersonName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number of Contact Person</label>
+                        <input type="text" id="contactPersonMobile" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- B. Particulars of Property Owner -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">B. Particulars of Property Owner</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Property Owner(s) Name</label>
+                        <input type="text" id="propertyOwnerName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Father's Name</label>
+                        <input type="text" id="fatherName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mother's Name</label>
+                        <input type="text" id="motherName" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Relationship with Borrower</label>
+                        <input type="text" id="relationshipBorrower" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Present Address</label>
+                        <textarea id="presentAddress" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Permanent Address</label>
+                        <textarea id="permanentAddress" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Contact Number</label>
+                        <input type="text" id="ownerContactNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">NID Number</label>
+                        <input type="text" id="ownerNidNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- C. Schedule of Property -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4 border-b pb-2">C. Schedule of Property</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">District</label>
+                        <input type="text" id="district" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Thana / Upazila</label>
+                        <input type="text" id="thana" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mouza</label>
+                        <input type="text" id="mouza" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">JL No.</label>
+                        <input type="text" id="jlNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Local Authority</label>
+                        <input type="text" id="localAuthority" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Land Office</label>
+                        <input type="text" id="landOffice" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Sub-Register Office</label>
+                        <input type="text" id="subRegisterOffice" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Khatian No.</label>
+                        <input type="text" id="khatianNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Corresponding Dag No.</label>
+                        <input type="text" id="dagNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Deed Number & Registration Date</label>
+                        <input type="text" id="deedNumber" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Mutation Khatian No.</label>
+                        <input type="text" id="mutationKhatianNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Jote No.</label>
+                        <input type="text" id="joteNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">DCR No.</label>
+                        <input type="text" id="dcrNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">GRR No.</label>
+                        <input type="text" id="grrNo" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Land Type (LDTR)</label>
+                        <input type="text" id="landType" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Last Ownership Transfer</label>
+                        <input type="text" id="lastOwnershipTransfer" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Property Address</label>
+                        <textarea id="propertyAddress" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Total Area of Land as per Deed</label>
+                        <input type="text" id="landAreaDeed" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Total Area of Land Physically found</label>
+                        <input type="text" id="landAreaPhysical" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Way to visit the Property</label>
+                        <textarea id="wayToVisit" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex justify-center space-x-4">
+                    <button onclick="generateReport()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        Create Report
+                    </button>
+                    <button onclick="clearForm()" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-8 rounded-lg transition duration-200 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                        Clear Form
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-calculate valuation values
+        function calculateValues() {
+            // Present Market Value
+            const pmvLandArea = parseFloat(document.getElementById('pmvLandArea').value) || 0;
+            const pmvRate = parseFloat(document.getElementById('pmvRate').value) || 0;
+            const pmvBuildingValue = parseFloat(document.getElementById('pmvBuildingValue').value) || 0;
+            document.getElementById('pmvLandValue').value = pmvLandArea * pmvRate;
+            document.getElementById('pmvTotalValue').value = (pmvLandArea * pmvRate) + pmvBuildingValue;
+            
+            // Forced Sale Value
+            const fsvLandArea = parseFloat(document.getElementById('fsvLandArea').value) || 0;
+            const fsvRate = parseFloat(document.getElementById('fsvRate').value) || 0;
+            const fsvBuildingValue = parseFloat(document.getElementById('fsvBuildingValue').value) || 0;
+            document.getElementById('fsvLandValue').value = fsvLandArea * fsvRate;
+            document.getElementById('fsvTotalValue').value = (fsvLandArea * fsvRate) + fsvBuildingValue;
+            
+            // Mouza Value
+            const mvLandArea = parseFloat(document.getElementById('mvLandArea').value) || 0;
+            const mvRate = parseFloat(document.getElementById('mvRate').value) || 0;
+            const mvBuildingValue = parseFloat(document.getElementById('mvBuildingValue').value) || 0;
+            document.getElementById('mvLandValue').value = mvLandArea * mvRate;
+            document.getElementById('mvTotalValue').value = (mvLandArea * mvRate) + mvBuildingValue;
+        }
+        
+        // Clear all form fields
+        function clearForm() {
+            if (confirm('Are you sure you want to clear all fields?')) {
+                document.querySelectorAll('input, textarea, select').forEach(element => {
+                    if (element.type !== 'button' && element.type !== 'submit') {
+                        element.value = '';
+                    }
+                });
+            }
+        }
+        
+        // Gather all form data
+        function gatherFormData() {
+            const fields = [
+                'refAccountName', 'refNumber', 'woReceivedDate', 'inspectionDate',
+                'surveyorName', 'designation', 'nidNumber', 'contactNumber',
+                'amkRef', 'reportDate', 'subjectACName',
+                'pmvLandArea', 'pmvRate', 'pmvLandValue', 'pmvBuildingValue', 'pmvTotalValue',
+                'fsvLandArea', 'fsvRate', 'fsvLandValue', 'fsvBuildingValue', 'fsvTotalValue',
+                'mvLandArea', 'mvRate', 'mvLandValue', 'mvBuildingValue', 'mvTotalValue',
+                'fileReceivingDate', 'valuationRefNo', 'valuationDate', 'propertyLocation',
+                'valuationConductedBy', 'typeOfProperty', 'propertySeller',
+                'currentMarketValue', 'forcedSaleValue', 'deviationPlinth', 'deviationFloor',
+                'accountName', 'officeAddress', 'factoryAddress', 'natureOfBusiness',
+                'ageOfBusiness', 'organizationType', 'contactPersonName', 'contactPersonMobile',
+                'propertyOwnerName', 'fatherName', 'motherName', 'relationshipBorrower',
+                'presentAddress', 'permanentAddress', 'ownerContactNumber', 'ownerNidNumber',
+                'district', 'thana', 'mouza', 'jlNo', 'localAuthority', 'landOffice',
+                'subRegisterOffice', 'khatianNo', 'dagNo', 'deedNumber', 'mutationKhatianNo',
+                'joteNo', 'dcrNo', 'grrNo', 'landType', 'propertyAddress',
+                'lastOwnershipTransfer', 'landAreaDeed', 'landAreaPhysical', 'wayToVisit'
+            ];
+            
+            const data = {};
+            fields.forEach(field => {
+                const element = document.getElementById(field);
+                data[field] = element ? element.value : '';
+            });
+            
+            return data;
+        }
+        
+        // Generate Word document
+        async function generateReport() {
+            const data = gatherFormData();
+            const { 
+                Document, Packer, Paragraph, TextRun, Table, TableRow, TableCell, 
+                AlignmentType, BorderStyle, WidthType, HeadingLevel, PageBreak 
+            } = docx;
+            
+            // Create the document
+            const doc = new Document({
+                sections: [{
+                    properties: {
+                        page: {
+                            margin: {
+                                top: 720,
+                                right: 720,
+                                bottom: 720,
+                                left: 720,
+                            }
+                        }
+                    },
+                    children: [
+                        // Title
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "INSPECTION, SURVEY & VALUATION REPORT",
+                                    bold: true,
+                                    size: 28,
+                                })
+                            ],
+                            alignment: AlignmentType.CENTER,
+                            spacing: { after: 400 }
+                        }),
+                        
+                        // Reference Details Table
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Reference Account Name", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.refAccountName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Reference No.", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.refNumber || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "W/O Received Date", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.woReceivedDate || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Date of Inspection", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.inspectionDate || '')] }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 200 } }),
+                        
+                        // Surveyor Details Table
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Surveyor Name", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.surveyorName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Designation", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.designation || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "NID Number", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.nidNumber || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Contact Number", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.contactNumber || '')] }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Submitted by and Submitted to sections
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ 
+                                            children: [
+                                                new Paragraph({ 
+                                                    children: [new TextRun({ text: "Submitted by:", bold: true })],
+                                                    spacing: { after: 200 }
+                                                }),
+                                                new Paragraph({ children: [new TextRun({ text: "AMK Associates Limited", bold: true })] }),
+                                                new Paragraph("68, Khilgaon Chowdhurypara (4th floor)"),
+                                                new Paragraph("DIT Road, Rampura, Dhaka-1219"),
+                                                new Paragraph("E-mail: amkassociatesbd@gmail.com"),
+                                                new Paragraph("Website: www.amkassociatesltd.com"),
+                                                new Paragraph("Contact: +88 01841-132714"),
+                                            ]
+                                        }),
+                                        new TableCell({ 
+                                            children: [
+                                                new Paragraph({ 
+                                                    children: [new TextRun({ text: "Submitted to:", bold: true })],
+                                                    spacing: { after: 200 }
+                                                }),
+                                                new Paragraph({ children: [new TextRun({ text: "Mr. Mohammad Abu Kausar", bold: true })] }),
+                                                new Paragraph("Head, Home Loan, Credit Administration"),
+                                                new Paragraph("Eastern Bank PLC."),
+                                                new Paragraph("Head Office"),
+                                                new Paragraph("Z N Tower, Bir Uttam Mir Shawkat Sarak"),
+                                                new Paragraph("House # 02, Road # 08,"),
+                                                new Paragraph("Gulshan-1, Dhaka-1212"),
+                                                new Paragraph("Contact: +88 01830-302971"),
+                                            ]
+                                        }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Reference and Date
+                        new Paragraph(`Ref.: AMK/EBPLC/2025/${data.amkRef || '...'}`),
+                        new Paragraph(`Date: ${data.reportDate || '...'}`),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Recipient
+                        new Paragraph({ children: [new TextRun({ text: "Mr. Mohammad Abu Kausar", bold: true })] }),
+                        new Paragraph("Head, Home Loan, Credit Administration"),
+                        new Paragraph("Eastern Bank PLC."),
+                        new Paragraph("Head Office, Z N Tower, Bir Uttam Mir Shawkat Sarak"),
+                        new Paragraph("House # 02, Road # 08, Gulshan-1, Dhaka-1212"),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Subject
+                        new Paragraph({
+                            children: [
+                                new TextRun({ text: "Subject: Inspection, Survey & Valuation Report on Land with Building", bold: true })
+                            ]
+                        }),
+                        new Paragraph({
+                            children: [
+                                new TextRun({ text: `Ref. A/C Name: ${data.subjectACName || '...'}`, bold: true })
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Letter body
+                        new Paragraph("Dear Sir,"),
+                        new Paragraph({ text: "", spacing: { after: 200 } }),
+                        new Paragraph("Greetings from AMK Associates Limited and Thank You very much for referring us!"),
+                        new Paragraph({ text: "", spacing: { after: 200 } }),
+                        new Paragraph("Pursuant to your communication, we, AMK Associates Limited (\"AMK\") has conducted the inspection, survey and valuation. Summary of the valuation is as below:"),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Valuation Summary Table
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                // Header row
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph({ text: "Description", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "Total Land Area (Decimal)", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "Present Rate per Decimal (BDT)", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "Land Value (BDT)", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "Building Value (BDT)", bold: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "Total Value (BDT)", bold: true })] }),
+                                    ]
+                                }),
+                                // Formula row
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("")] }),
+                                        new TableCell({ children: [new Paragraph({ text: "a", italics: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "b", italics: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "c=a*b", italics: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "d", italics: true })] }),
+                                        new TableCell({ children: [new Paragraph({ text: "e=c+d", italics: true })] }),
+                                    ]
+                                }),
+                                // Present Market Value
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Present Market Value")] }),
+                                        new TableCell({ children: [new Paragraph(data.pmvLandArea || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.pmvRate || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.pmvLandValue || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.pmvBuildingValue || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.pmvTotalValue || '')] }),
+                                    ]
+                                }),
+                                // Forced Sale Value
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Forced Sale Value (20% less to Present Market Value)")] }),
+                                        new TableCell({ children: [new Paragraph(data.fsvLandArea || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.fsvRate || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.fsvLandValue || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.fsvBuildingValue || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.fsvTotalValue || '')] }),
+                                    ]
+                                }),
+                                // Mouza Value
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Mouza Value")] }),
+                                        new TableCell({ children: [new Paragraph(data.mvLandArea || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.mvRate || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.mvLandValue || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.mvBuildingValue || '')] }),
+                                        new TableCell({ children: [new Paragraph(data.mvTotalValue || '')] }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        new Paragraph("The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge."),
+                        new Paragraph({ text: "", spacing: { after: 200 } }),
+                        new Paragraph("Detail Report and necessary attachments are enclosed herewith for your record and perusal."),
+                        new Paragraph({ text: "", spacing: { after: 200 } }),
+                        new Paragraph("For any query, please feel free to contact us."),
+                        new Paragraph({ text: "", spacing: { after: 200 } }),
+                        new Paragraph("With best regards,"),
+                        
+                        new Paragraph({ text: "", spacing: { after: 800 } }),
+                        
+                        // Signatures
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            borders: {
+                                top: { style: BorderStyle.NONE },
+                                bottom: { style: BorderStyle.NONE },
+                                left: { style: BorderStyle.NONE },
+                                right: { style: BorderStyle.NONE },
+                                insideHorizontal: { style: BorderStyle.NONE },
+                                insideVertical: { style: BorderStyle.NONE },
+                            },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ 
+                                            borders: {
+                                                top: { style: BorderStyle.NONE },
+                                                bottom: { style: BorderStyle.NONE },
+                                                left: { style: BorderStyle.NONE },
+                                                right: { style: BorderStyle.NONE },
+                                            },
+                                            children: [
+                                                new Paragraph("Engr. Abdullah Al Rafi"),
+                                                new Paragraph("Executive- Inspection, Survey & Valuation"),
+                                            ]
+                                        }),
+                                        new TableCell({ 
+                                            borders: {
+                                                top: { style: BorderStyle.NONE },
+                                                bottom: { style: BorderStyle.NONE },
+                                                left: { style: BorderStyle.NONE },
+                                                right: { style: BorderStyle.NONE },
+                                            },
+                                            children: [new Paragraph("")] 
+                                        }),
+                                        new TableCell({ 
+                                            borders: {
+                                                top: { style: BorderStyle.NONE },
+                                                bottom: { style: BorderStyle.NONE },
+                                                left: { style: BorderStyle.NONE },
+                                                right: { style: BorderStyle.NONE },
+                                            },
+                                            children: [
+                                                new Paragraph("Md. Rashed Hossain"),
+                                                new Paragraph("Manager & Unit-In-Charge: ISV"),
+                                            ]
+                                        }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // Enclosures
+                        new Paragraph({
+                            children: [new TextRun({ text: "Encl:", bold: true })]
+                        }),
+                        new Paragraph("1. Annexure-I: Photograph of Property"),
+                        new Paragraph("2. Annexure-II: Hand Sketch Map"),
+                        new Paragraph("3. Annexure-III: Mouza Map"),
+                        new Paragraph("4. Annexure-IV: Location on Google Map"),
+                        new Paragraph("5. Annexure-V: QR Code for video of the Property"),
+                        new Paragraph("6. Annexure-VI: QR Code for Map of the Property"),
+                        new Paragraph("7. Annexure-VII: SRO Mouza Value"),
+                        new Paragraph("8. Annexure-VIII: Status In Area Master Plan"),
+                        
+                        // Page break
+                        new PageBreak(),
+                        
+                        // Summary of Valuation Report
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "Summary of the Valuation Report",
+                                    bold: true,
+                                    underline: {},
+                                    size: 24,
+                                })
+                            ],
+                            spacing: { after: 400 }
+                        }),
+                        
+                        new Paragraph({ children: [new TextRun({ text: `File receiving date: ${data.fileReceivingDate || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Valuation Ref No.: ${data.valuationRefNo || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Valuation date: ${data.valuationDate || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Property location: ${data.propertyLocation || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Valuation conducted by: ${data.valuationConductedBy || ''}`, bold: true })] }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        new Paragraph(`Surveyor Name: ${data.surveyorName || ''}`),
+                        new Paragraph(`Designation: ${data.designation || ''}`),
+                        new Paragraph(`NID Number: ${data.nidNumber || ''}`),
+                        new Paragraph(`Contact Number: ${data.contactNumber || ''}`),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        new Paragraph({ children: [new TextRun({ text: `Type of property: ${data.typeOfProperty || 'Freehold/Leasehold'}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Type of Property seller: ${data.propertySeller || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Current Market Value: BDT ${data.currentMarketValue || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Forced Sale Value: BDT ${data.forcedSaleValue || ''}`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Deviation (Plinth): ${data.deviationPlinth || '...'}%`, bold: true })] }),
+                        new Paragraph({ children: [new TextRun({ text: `Deviation (Floor): ${data.deviationFloor || '... to ...'}`, bold: true })] }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // A. Particulars of Account
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "A. Particulars of Account:",
+                                    bold: true,
+                                    underline: {},
+                                })
+                            ],
+                            spacing: { after: 400 }
+                        }),
+                        
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("A/C Name")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.accountName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Office/Business Address")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.officeAddress || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Factory Address")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.factoryAddress || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Nature of Business")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.natureOfBusiness || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Age of Business")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.ageOfBusiness || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Organization Type")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.organizationType || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Contact Person Name")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.contactPersonName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Mobile Number of Contact Person")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.contactPersonMobile || '')] }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // B. Particulars of Property Owner
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "B. Particulars of Property Owner:",
+                                    bold: true,
+                                    underline: {},
+                                })
+                            ],
+                            spacing: { after: 400 }
+                        }),
+                        
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Property Owner(s) Name")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.propertyOwnerName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Father's Name")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.fatherName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Mother's Name")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.motherName || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Present Address")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.presentAddress || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Permanent Address")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.permanentAddress || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Contact Number")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.ownerContactNumber || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("NID Number")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.ownerNidNumber || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Relationship with Borrower")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.relationshipBorrower || '')] }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                        
+                        new Paragraph({ text: "", spacing: { after: 400 } }),
+                        
+                        // C. Schedule of Property
+                        new Paragraph({
+                            children: [
+                                new TextRun({
+                                    text: "C. Schedule of Property:",
+                                    bold: true,
+                                    underline: {},
+                                })
+                            ],
+                            spacing: { after: 400 }
+                        }),
+                        
+                        new Table({
+                            width: { size: 100, type: WidthType.PERCENTAGE },
+                            rows: [
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("District")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.district || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Thana / Upazila")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.thana || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Mouza")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.mouza || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("JL No.")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.jlNo || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Local Authority")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.localAuthority || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Land Office")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.landOffice || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Sub-Register Office")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.subRegisterOffice || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Khatian No.")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.khatianNo || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Corresponding Dag No.")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.dagNo || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Deed Number & Registration Date")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.deedNumber || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Mutation Khatian No.")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.mutationKhatianNo || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Property Address")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.propertyAddress || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Total Area of Land as per Deed")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.landAreaDeed || '')] }),
+                                    ]
+                                }),
+                                new TableRow({
+                                    children: [
+                                        new TableCell({ children: [new Paragraph("Total Area of Land Physically found")] }),
+                                        new TableCell({ children: [new Paragraph(":")] }),
+                                        new TableCell({ children: [new Paragraph(data.landAreaPhysical || '')] }),
+                                    ]
+                                }),
+                            ]
+                        }),
+                    ]
+                }]
+            });
+            
+            // Generate and save the document
+            try {
+                const blob = await Packer.toBlob(doc);
+                saveAs(blob, `EBL_Valuation_Report_${new Date().toISOString().slice(0,10)}.docx`);
+                alert('Report generated successfully!');
+            } catch (error) {
+                console.error('Error generating document:', error);
+                alert('Error generating report. Please check the console for details.');
+            }
+        }
+    </script>
+</body>
+</html>
