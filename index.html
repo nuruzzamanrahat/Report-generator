@@ -345,8 +345,8 @@
             <!-- SUBMITTED TO BOX -->
             <div class="address-box">
                 <h3>Submitted to:</h3>
-                <input type="text" id="input-recipient-name" placeholder="Recipient Name (e.g., Mr. Mohammad Abu Kausar)" oninput="syncRecipientData()" style="font-weight: bold; margin-bottom: 5px; border: 1px solid #ccc; padding: 5px; width: 100%;">
-                <textarea id="input-recipient-address" placeholder="Designation&#10;Bank Name&#10;Address Line 1&#10;Address Line 2&#10;Contact Info" oninput="syncRecipientData()" style="height: 120px; width: 100%; border: 1px solid #ccc; padding: 5px; font-family: inherit;"></textarea>
+                <input type="text" id="input-recipient-name" placeholder="Recipient Name" oninput="syncRecipientData()" style="font-weight: bold; margin-bottom: 5px; border: 1px solid #ccc; padding: 2px; width: 100%;">
+                <textarea id="input-recipient-address" placeholder="Designation&#10;Bank Name&#10;Address Line 1&#10;Address Line 2&#10;Contact Info" oninput="syncRecipientData()" style="height: 120px; width: 100%; border: 1px solid #ccc; padding: 2px; font-family: inherit;"></textarea>
             </div>
         </div>
         <!-- Spacer pushes footer to bottom -->
@@ -378,25 +378,25 @@
         <!-- HEADER IMAGE END -->
         <!-- ================================================================================== -->
         
-        <div style="margin: 30px 0;">
-            <p>Ref.: AMK/EBPLC/2025/<input type="text" style="width: 150px; display: inline-block;" placeholder="Enter ref"></p>
+        <div style="margin: 20px 0;">
+            <p>Ref.: <input type="text" style="width: 150px; display: inline-block;" placeholder="e.g., AMK/EBPLC/2025/..."></p>
             <p>Date: <input type="date" style="width: 200px; display: inline-block;"></p>
         </div>
         
         <!-- LETTER BODY RECIPIENT SECTION -->
-        <div style="margin: 20px 0;">
+        <div style="margin: 0px 0;">
             <p><strong id="output-recipient-name"></strong></p>
             <p id="output-recipient-address" style="white-space: pre-wrap; margin-top: 0; line-height: 1.4;"></p>
         </div>
         
-        <div style="margin: 20px 0;">
+        <div style="margin: 0px 0;">
             <p><strong>Subject: Inspection, Survey & Valuation Report on Land with Building</strong></p>
             <p><strong>Ref. A/C Name: <input type="text" style="width: 300px; display: inline-block; font-weight: bold;" placeholder="Enter A/C name"></strong></p>
         </div>
         
         <p>Dear Sir,</p>
         <p>Greetings from AMK Associates Limited and Thank You very much for referring us!</p>
-        <p style="text-align: justify;">Pursuant to your communication through <input type="text" style="width: 150px; display: inline-block;" placeholder="Enter medium">, dated: <input type="date" style="width: 150px; display: inline-block;"> by Mr./Ms. <input type="text" style="width: 200px; display: inline-block;" placeholder="Enter name">, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
+        <p style="text-align: justify;">Pursuant to your communication through <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter medium">, dated: <input type="date" style="width: 100px; display: inline-block;"> by Mr./Ms. <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter name">, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
         
         <table>
             <thead>
@@ -450,7 +450,7 @@
         <p>For any query, please feel free to contact us.</p>
         <p>With best regards,</p>
         
-        <div style="margin: 50px 0 30px 0;">
+        <div style="margin: 30px 0 30px 0;">
             <table style="border: none;">
                 <tr>
                     <td style="border: none; width: 40%;">
@@ -469,7 +469,7 @@
                 </tr>
             </table>
         </div>
-        
+        <div class="two-column">
         <div class="note">
             <p><strong>Encl:</strong></p>
             <ol style="padding-left: 20px;">
@@ -477,11 +477,16 @@
                 <li>Annexure-II: Hand Sketch Map</li>
                 <li>Annexure-III: Mouza Map</li>
                 <li>Annexure-IV: Location on Google Map</li>
+            </ol>
+        </div>
+        <div class="note">
+            <ol start="5">
                 <li>Annexure-V: QR Code for video of the Property</li>
                 <li>Annexure-VI: QR Code for Map of the Property</li>
                 <li>Annexure-VII: SRO Mouza Value</li>
                 <li>Annexure-VIII: Status In Area Master Plan</li>
             </ol>
+        </div>
         </div>
         <!-- Spacer pushes footer to bottom -->
             <div class="content-spacer"></div>
