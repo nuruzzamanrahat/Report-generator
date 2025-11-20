@@ -1049,11 +1049,14 @@
                 span.style.fontWeight = style.fontWeight;
                 span.style.textAlign = style.textAlign;
                 span.style.display = 'inline-block';
-                span.style.width = style.width;
+                span.style.whiteSpace = 'pre-wrap';
+                span.style.wordBreak = 'break-word';
+                span.style.width = input.scrollWidth + 'px';
+                
                 // Ensure multiline for textareas
-                if (input.tagName === 'TEXTAREA') {
-                    span.style.whiteSpace = 'pre-wrap';
-                }
+                //if (input.tagName === 'TEXTAREA') {
+                //    span.style.whiteSpace = 'pre-wrap';
+                //}
 
                 // Hide input, show span
                 input.style.display = 'none';
