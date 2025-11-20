@@ -26,20 +26,17 @@
         }
         
         /* The Main Paper Sheet */
-        .page-sheet {
-            width: 210mm;
-            height: 297mm; /* Force A4 Height */
-            margin: 0 auto 30px auto; /* Center and add gap between pages */
+        .container {
+            max-width: 210mm; /* A4 Width */
+            min-height: 297mm; /* A4 Height */
+            margin: 0 auto;
             background-color: white;
-            padding: 15mm 20mm; /* Margins: Top/Bottom 15mm, Side 20mm */
-            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            padding: 20mm; /* Standard Margins */
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
             position: relative;
             display: flex;
-            flex-direction: column; /* Stack children vertically */
-            overflow: hidden; /* Hide overflow if content is too long */
+            flex-direction: column;
         }
-        
-        /* --- FLEXIBLE SPACER --- */
         /* This pushes the footer to the bottom */
         .content-spacer {
             flex: 1;
@@ -61,7 +58,7 @@
             max-height: 100px;
             object-fit: contain;
             display: block;
-            margin-top: auto; /* Pushes footer to bottom if flex page-sheet allows */
+            margin-top: auto; /* Pushes footer to bottom if flex container allows */
             padding-top: 20px;
         }
 
@@ -244,7 +241,7 @@
                 padding: 0;
                 padding-bottom: 0;
             }
-            .page-sheet {
+            .container {
                 box-shadow: none;
                 padding: 0;
                 margin: 0;
@@ -268,16 +265,16 @@
 </head>
 <body>
     
-    <div id="report-content">
+    <!-- THE REPORT CONTENT STARTS HERE -->
+    <div class="container" id="report-content">
         
         <!-- ================================================================================== -->
-        <!-- PAGE SHEET 1: Introduction & Valuation Table -->
+        <!-- HEADER IMAGE START - PAGE 1 -->
+        <!-- INSTRUCTION: Replace 'PASTE_YOUR_HEADER_LINK_HERE' below with your actual Image URL -->
+        <!-- Example: src="https://raw.githubusercontent.com/your-username/repo/main/header.png" -->
         <!-- ================================================================================== -->
-        <div class="page-sheet">
-            
-            <!-- Auto-Filled Header -->
-            <img src="" class="report-header-img" alt="Report Header">
-
+        
+        <img src="PASTE_YOUR_HEADER_LINK_HERE" class="report-header-img" alt="Report Header" crossorigin="anonymous">
         
         <!-- ================================================================================== -->
         <!-- HEADER IMAGE END -->
@@ -460,18 +457,26 @@
         </div>
         <!-- Spacer pushes footer to bottom -->
             <div class="content-spacer"></div>
+        <!-- ================================================================================== -->
+        <!-- FOOTER IMAGE START - PAGE 1 -->
+        <!-- INSTRUCTION: Replace 'PASTE_YOUR_FOOTER_LINK_HERE' below with your actual Image URL -->
+        <!-- ================================================================================== -->
+        
+        <img src="PASTE_YOUR_FOOTER_LINK_HERE" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
 
-            <!-- Auto-Filled Footer -->
-            <img src="" class="report-footer-img" alt="Report Footer">
-        </div>
+        <!-- ================================================================================== -->
+        <!-- FOOTER IMAGE END -->
+        <!-- ================================================================================== -->
 
+        <!-- Page Break for PDF -->
+        <div class="page-break"></div>
         
         <!-- ================================================================================== -->
         <!-- HEADER IMAGE START - PAGE 2 (SUMMARY) -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
+        <!-- INSTRUCTION: Replace 'PASTE_YOUR_HEADER_LINK_HERE' below with your actual Image URL -->
         <!-- ================================================================================== -->
         
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+        <img src="PASTE_YOUR_HEADER_LINK_HERE" class="report-header-img" alt="Report Header" crossorigin="anonymous">
         
         <!-- ================================================================================== -->
         <!-- HEADER IMAGE END -->
@@ -798,13 +803,6 @@
             <i class="fas fa-trash"></i> Clear Form
         </button>
     </div>
-    <script>
-        // --- 0. CONFIGURATION ---
-        const REPORT_CONFIG = {
-            // PASTE YOUR LINKS HERE ONCE:
-            headerImage: "AMK Header.png", 
-            footerImage: "AKM Footer.png"
-        };
 
     <script>
         // --- 1. CALCULATIONS ---
