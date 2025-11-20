@@ -26,16 +26,23 @@
         }
         
         /* The Main Paper Sheet */
-        .container {
-            max-width: 210mm; /* A4 Width */
-            min-height: 297mm; /* A4 Height */
-            margin: 0 auto;
+        .page-sheet {
+            width: 210mm;
+            height: 297mm; /* Force A4 Height */
+            margin: 0 auto 30px auto; /* Center and add gap between pages */
             background-color: white;
-            padding: 20mm; /* Standard Margins */
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            padding: 15mm 20mm; /* Margins: Top/Bottom 15mm, Side 20mm */
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
             position: relative;
             display: flex;
-            flex-direction: column;
+            flex-direction: column; /* Stack children vertically */
+            overflow: hidden; /* Hide overflow if content is too long */
+        }
+        
+        /* --- FLEXIBLE SPACER --- */
+        /* This pushes the footer to the bottom */
+        .content-spacer {
+            flex: 1;
         }
 
         /* --- HEADER & FOOTER IMAGE STYLES --- */
@@ -54,7 +61,7 @@
             max-height: 100px;
             object-fit: contain;
             display: block;
-            margin-top: auto; /* Pushes footer to bottom if flex container allows */
+            margin-top: auto; /* Pushes footer to bottom if flex page-sheet allows */
             padding-top: 20px;
         }
 
@@ -237,7 +244,7 @@
                 padding: 0;
                 padding-bottom: 0;
             }
-            .container {
+            .page-sheet {
                 box-shadow: none;
                 padding: 0;
                 margin: 0;
@@ -261,16 +268,16 @@
 </head>
 <body>
     
-    <!-- THE REPORT CONTENT STARTS HERE -->
-    <div class="container" id="report-content">
+    <div id="report-content">
         
         <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 1 -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- Example: src="https://raw.githubusercontent.com/your-username/repo/main/header.png" -->
+        <!-- PAGE SHEET 1: Introduction & Valuation Table -->
         <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+        <div class="page-sheet">
+            
+            <!-- Auto-Filled Header -->
+            <img src="" class="report-header-img" alt="Report Header">
+
         
         <!-- ================================================================================== -->
         <!-- HEADER IMAGE END -->
@@ -451,20 +458,13 @@
                 <li>Annexure-VIII: Status In Area Master Plan</li>
             </ol>
         </div>
-        
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 1 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
+        <!-- Spacer pushes footer to bottom -->
+            <div class="content-spacer"></div>
 
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
+            <!-- Auto-Filled Footer -->
+            <img src="" class="report-footer-img" alt="Report Footer">
+        </div>
 
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
         
         <!-- ================================================================================== -->
         <!-- HEADER IMAGE START - PAGE 2 (SUMMARY) -->
@@ -798,6 +798,13 @@
             <i class="fas fa-trash"></i> Clear Form
         </button>
     </div>
+    <script>
+        // --- 0. CONFIGURATION ---
+        const REPORT_CONFIG = {
+            // PASTE YOUR LINKS HERE ONCE:
+            headerImage: "AMK Header.png", 
+            footerImage: "AKM Footer.png"
+        };
 
     <script>
         // --- 1. CALCULATIONS ---
