@@ -270,7 +270,7 @@
         <!-- Example: src="https://raw.githubusercontent.com/your-username/repo/main/header.png" -->
         <!-- ================================================================================== -->
         
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+        <img src="PASTE_YOUR_HEADER_LINK_HERE" class="report-header-img" alt="Report Header" crossorigin="anonymous">
         
         <!-- ================================================================================== -->
         <!-- HEADER IMAGE END -->
@@ -333,7 +333,7 @@
                 <p><strong>AMK Associates Limited</strong></p>
                 <p>68, Khilgaon Chowdhurypara (4th floor)</p>
                 <p>DIT Road, Rampura, Dhaka-1219</p>
-                <p>E-mail: amkassociatesbd@gmail.com</p>
+                <p>E-mail: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d5b4b8beb4a6a6bab6bcb4a1b0a6b7b195b2b8b4bcb9fbb6bab8">[email&#160;protected]</a></p>
                 <p>Website: www.amkassociatesltd.com</p>
                 <p>Contact: +88 01841-132714</p>
             </div>
@@ -457,7 +457,7 @@
         <!-- INSTRUCTION: Replace 'PASTE_YOUR_FOOTER_LINK_HERE' below with your actual Image URL -->
         <!-- ================================================================================== -->
         
-        <img src="AKM Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
+        <img src="PASTE_YOUR_FOOTER_LINK_HERE" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
 
         <!-- ================================================================================== -->
         <!-- FOOTER IMAGE END -->
@@ -799,7 +799,7 @@
         </button>
     </div>
 
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // --- 1. CALCULATIONS ---
         function calculateValuation() {
             const rows = document.querySelectorAll("#valuation-table tr");
@@ -923,11 +923,53 @@
                 const inputs = document.querySelectorAll("input, textarea, select");
                 inputs.forEach(input => input.value = "");
                 
-                // Reset outputs
-                document.getElementById('output-recipient-name').innerText = "";
-                document.getElementById('output-recipient-address').innerText = "";
+                et sync and recalculate
+                syncRecipientData();
+                calculateValuation();
             }
         }
+
+        // --- 6. AUTO-APPLY HEADER & FOOTER ON LOAD ---
+        // ⚙️ CONFIGURATION: Set your header and footer image links once here
+        const REPORT_CONFIG = {
+            headerImageURL: 'https://i.ibb.co/ZgG8v3v/1000126538-removebg-preview.png',
+            footerImageURL: 'https://i.ibb.co/ZgG8v3v/1000126538-removebg-preview.png'
+        };
+
+        // This function runs automatically when page loads
+        function applyHeaderFooterImages() {
+            // Apply header image to all elements with class 'report-header-img'
+            const headerImages = document.querySelectorAll('.report-header-img');
+            headerImages.forEach(img => {
+                if (REPORT_CONFIG.headerImageURL) {
+                    img.src = REPORT_CONFIG.headerImageURL;
+                }
+            });
+
+            // Apply footer image to all elements with class 'report-footer-img'
+            const footerImages = document.querySelectorAll('.report-footer-img');
+            footerImages.forEach(img => {
+                if (REPORT_CONFIG.footerImageURL) {
+                    img.src = REPORT_CONFIG.footerImageURL;
+                }
+            });
+        }
+
+        // --- 7. INITIALIZATION ON PAGE LOAD ---
+        window.addEventListener('DOMContentLoaded', function() {
+            // Apply header and footer images automatically
+            applyHeaderFooterImages();
+            
+            // Attach calculation listeners
+            const calcInputs = document.querySelectorAll('.calc-land-area, .calc-rate, .calc-build-val');
+            calcInputs.forEach(input => {
+                input.addEventListener('input', calculateValuation);
+            });
+            
+            // Attach sync listeners for recipient info
+            document.getElementById('input-recipient-name').addEventListener('input', syncRecipientData);
+            document.getElementById('input-recipient-address').addEventListener('input', syncRecipientData);
+        });
     </script>
 </body>
 </html>
