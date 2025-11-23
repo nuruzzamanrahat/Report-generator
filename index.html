@@ -652,3 +652,155 @@
         </div>
 
         <!-- ==================== PAGE 6 ==================== -->
+
+        <!-- CONTROL BAR (Floating at Bottom) -->
+    <div class="control-bar">
+        <button class="btn btn-preview" onclick="togglePreview()" id="btn-preview">
+            <i class="fas fa-eye"></i> Preview Report
+        </button>
+        <button class="btn btn-edit" onclick="togglePreview()" id="btn-edit">
+            <i class="fas fa-pen"></i> Edit Report
+        </button>
+        <button class="btn btn-download" onclick="downloadPDF()">
+            <i class="fas fa-file-pdf"></i> Download PDF Report
+        </button>
+        <button class="btn btn-clear" onclick="clearForm()">
+            <i class="fas fa-trash"></i> Clear Form
+        </button>
+    </div>
+
+    <script>
+        // --- 1. CALCULATIONS ---
+        function calculateValuation() {
+            const rows = document.querySelectorAll("#valuation-table tr");
+            
+            rows.forEach(row => {
+                const area = parseFloat(row.querySelector(".calc-land-area").value) || 0;
+                const rate = parseFloat(row.querySelector(".calc-rate").value) || 0;
+                const buildVal = parseFloat(row.querySelector(".calc-build-val").value) || 0;
+                
+                const landVal = area * rate;
+                const totalVal = landVal + buildVal;
+                
+                row.querySelector(".calc-land-val").value = landVal.toFixed(2);
+                row.querySelector(".calc-total").value = totalVal.toFixed(2);
+            });
+        }
+        
+        // --- 2. SYNC RECIPIENT INFO ---
+        function syncRecipientData() {
+            const nameInput = document.getElementById('input-recipient-name');
+            const addressInput = document.getElementById('input-recipient-address');
+            
+            document.getElementById('output-recipient-name').innerText = nameInput.value;
+            document.getElementById('output-recipient-address').innerText = addressInput.value;
+        }
+
+        // --- 3. PREVIEW MODE LOGIC ---
+        function togglePreview() {
+            const body = document.body;
+            const btnPreview = document.getElementById('btn-preview');
+            const btnEdit = document.getElementById('btn-edit');
+
+            body.classList.toggle('preview-mode');
+
+            if (body.classList.contains('preview-mode')) {
+                // Switch to Preview
+                btnPreview.style.display = 'none';
+                btnEdit.style.display = 'flex';
+                
+                // Optional: Scroll to top to see the document
+                window.scrollTo(0, 0);
+            } else {
+                // Switch back to Edit
+                btnPreview.style.display = 'flex';
+                btnEdit.style.display = 'none';
+            }
+        }
+
+        // --- 4. DOWNLOAD PDF LOGIC ---
+        function downloadPDF() {
+            const element = document.getElementById('report-content');
+            
+            // 1. Temporary: Convert all inputs to text spans for accurate PDF rendering
+            // This fixes the "empty table" issue by ensuring html2pdf sees text, not form fields.
+            const inputs = element.querySelectorAll('input, textarea, select');
+            const originalDisplay = [];
+
+            inputs.forEach((input, index) => {
+                // Save original display style
+                originalDisplay[index] = input.style.display;
+
+                // Create text node
+                const span = document.createElement('span');
+                span.className = 'pdf-text-replacement'; // Tag for easy removal
+                
+                // Get value
+                let value = input.value;
+                if (input.tagName === 'SELECT') {
+                    value = input.options[input.selectedIndex].text;
+                    if (value === 'Select type') value = '';
+                }
+                
+                // Handle empty values to preserve layout height
+                if (!value) value = '\u00A0'; // Non-breaking space
+                
+                span.textContent = value;
+                
+                // Copy styling (font size, weight, alignment)
+                const style = window.getComputedStyle(input);
+                span.style.fontFamily = style.fontFamily;
+                span.style.fontSize = style.fontSize;
+                span.style.fontWeight = style.fontWeight;
+                span.style.textAlign = style.textAlign;
+                span.style.display = 'inline-block';
+                span.style.whiteSpace = 'pre-wrap';
+                span.style.wordBreak = 'break-word';
+                span.style.width = input.scrollWidth + 'px';
+                
+                // Ensure multiline for textareas
+                //if (input.tagName === 'TEXTAREA') {
+                //    span.style.whiteSpace = 'pre-wrap';
+                //}
+
+                // Hide input, show span
+                input.style.display = 'none';
+                input.parentNode.insertBefore(span, input);
+            });
+
+            // Configuration for html2pdf
+            const opt = {
+                margin:       [10, 10, 10, 10], // Better margins
+                filename:     'EBL_Valuation_Report.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Improved page breaking
+            };
+
+            // Generate
+            html2pdf().set(opt).from(element).save().then(function() {
+                // Revert changes: Remove spans, show inputs
+                const replacements = element.querySelectorAll('.pdf-text-replacement');
+                replacements.forEach(span => span.remove());
+                
+                inputs.forEach((input, index) => {
+                    input.style.display = originalDisplay[index];
+                });
+            });
+        }
+
+        // --- 5. CLEAR FORM LOGIC ---
+        function clearForm() {
+            if(confirm("Are you sure you want to clear all data?")) {
+                const inputs = document.querySelectorAll("input, textarea, select");
+                inputs.forEach(input => input.value = "");
+                
+                // Reset outputs
+                document.getElementById('output-recipient-name').innerText = "";
+                document.getElementById('output-recipient-address').innerText = "";
+            }
+        }
+    </script>
+</body>
+</html>
