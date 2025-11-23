@@ -22,34 +22,43 @@
             padding: 20px;
             background-color: #f5f5f5;
             line-height: 1.6;
-            padding-bottom: 100px; /* Space for control bar */
+            padding-bottom: 100px;
         }
         
-        /* The Main Paper Sheet */
+        /* Container for all sheets */
         .container {
-            max-width: 210mm; /* A4 Width */
-            min-height: 297mm; /* A4 Height */
+            max-width: 210mm;
             margin: 0 auto;
+        }
+        
+        /* Individual A4 Sheet */
+        .sheet {
+            width: 210mm;
+            min-height: 297mm;
             background-color: white;
-            padding: 15mm; /* Standard Margins */
+            padding: 15mm;
             box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            position: relative;
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
+            position: relative;
+            page-break-after: always;
         }
-        /* This pushes the footer to the bottom */
-        .content-spacer {
+        
+        /* Content area that grows to fill space */
+        .sheet-content {
             flex: 1;
         }
 
-        /* --- HEADER & FOOTER IMAGE STYLES --- */
+        /* Header & Footer Images */
         .report-header-img {
             width: 100%;
-            height: auto; /* Maintains aspect ratio */
-            max-height: 100px; /* Prevents it from taking too much space */
+            height: auto;
+            max-height: 100px;
             object-fit: contain;
             display: block;
             margin-bottom: 20px;
+            flex-shrink: 0;
         }
 
         .report-footer-img {
@@ -58,8 +67,9 @@
             max-height: 80px;
             object-fit: contain;
             display: block;
-            margin-top: auto; /* Pushes footer to bottom if flex container allows */
+            margin-top: auto;
             padding-top: 10px;
+            flex-shrink: 0;
         }
 
         /* Report Title */
@@ -95,7 +105,7 @@
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 10px px;
+            margin: 10px 0px;
             font-size: 12px;
         }
         
@@ -115,7 +125,7 @@
             text-align: center;
         }
         
-        /* Input Styles - Edit Mode */
+        /* Input Styles */
         input[type="text"], input[type="date"], input[type="number"], textarea, select {
             width: 100%;
             padding: 6px;
@@ -168,13 +178,10 @@
         }
         
         .page-break {
-            page-break-after: always;
-            height: 20px;
-            border-top: 2px dashed #ccc;
-            margin: 20px 0;
+            display: none;
         }
 
-        /* --- PREVIEW MODE STYLES --- */
+        /* PREVIEW MODE */
         body.preview-mode input, 
         body.preview-mode textarea, 
         body.preview-mode select {
@@ -191,12 +198,8 @@
         body.preview-mode ::placeholder {
             color: transparent;
         }
-        
-        body.preview-mode .page-break {
-            border-top: none; 
-        }
 
-        /* --- CONTROL BAR --- */
+        /* CONTROL BAR */
         .control-bar {
             position: fixed;
             bottom: 0;
@@ -234,26 +237,25 @@
         .btn-clear { background-color: #e74c3c; color: white; }
         .btn-edit { background-color: #f39c12; color: white; display: none; }
 
-        /* Print specific overrides */
+        /* PRINT */
         @media print {
             body {
                 background-color: white;
                 padding: 0;
-                padding-bottom: 0;
+            }
+            .sheet {
+                box-shadow: none;
+                margin-bottom: 0;
+                page-break-after: always;
             }
             .container {
-                box-shadow: none;
-                padding: 0;
-                margin: 0;
-                width: 100%;
                 max-width: none;
             }
             .control-bar {
                 display: none;
             }
             .page-break {
-                border: none;
-                height: 0;
+                display: none;
             }
             input, textarea, select {
                 border: none !important;
@@ -265,837 +267,388 @@
 </head>
 <body>
     
-    <!-- THE REPORT CONTENT STARTS HERE -->
     <div class="container" id="report-content">
         
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 1 -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- Example: src="https://raw.githubusercontent.com/your-username/repo/main/header.png" -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-
-
-        <h1 class="report-title">INSPECTION SURVEY & VALUATION REPORT</h1>
-        
-        <div class="header-section">
-            <table>
-                <tr>
-                    <th>Reference Account Name</th>
-                    <td style="width: 10px">:</td>
-                    <td><input type="text" placeholder="Enter reference account name"></td>
-                </tr>
-                <tr>
-                    <th>Reference No.</th>
-                    <td>:</td>
-                    <td><input type="text" placeholder="Enter reference number"></td>
-                </tr>
-                <tr>
-                    <th>W/O Received Date</th>
-                    <td>:</td>
-                    <td><input type="date"></td>
-                </tr>
-                <tr>
-                    <th>Date of Inspection</th>
-                    <td>:</td>
-                    <td><input type="date"></td>
-                </tr>
-            </table>
+        <!-- ==================== PAGE 1 ==================== -->
+        <div class="sheet">
+            <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
             
-            <table>
-                <tr>
-                    <th>Surveyor Name</th>
-                    <td style="width: 10px">:</td>
-                    <td><input type="text" placeholder="Enter surveyor name"></td>
-                </tr>
-                <tr>
-                    <th>Designation</th>
-                    <td>:</td>
-                    <td><input type="text" placeholder="Enter designation"></td>
-                </tr>
-                <tr>
-                    <th>NID Number</th>
-                    <td>:</td>
-                    <td><input type="text" placeholder="Enter NID number"></td>
-                </tr>
-                <tr>
-                    <th>Contact Number</th>
-                    <td>:</td>
-                    <td><input type="text" placeholder="Enter contact number"></td>
-                </tr>
-            </table>
-        </div>
-        
-        <div class="two-column">
-            <div class="address-box">
-                <h3>Submitted by:</h3>
-                <p><strong>AMK Associates Limited</strong></p>
-                <p>68, Khilgaon Chowdhurypara (4th floor)</p>
-                <p>DIT Road, Rampura, Dhaka-1219</p>
-                <p>E-mail: amkassociatesbd@gmail.com</p>
-                <p>Website: www.amkassociatesltd.com</p>
-                <p>Contact: +88 01841-132714</p>
+            <div class="sheet-content">
+                <h1 class="report-title">INSPECTION SURVEY & VALUATION REPORT</h1>
+                
+                <div class="header-section">
+                    <table>
+                        <tr>
+                            <th>Reference Account Name</th>
+                            <td style="width: 10px">:</td>
+                            <td><input type="text" placeholder="Enter reference account name"></td>
+                        </tr>
+                        <tr>
+                            <th>Reference No.</th>
+                            <td>:</td>
+                            <td><input type="text" placeholder="Enter reference number"></td>
+                        </tr>
+                        <tr>
+                            <th>W/O Received Date</th>
+                            <td>:</td>
+                            <td><input type="date"></td>
+                        </tr>
+                        <tr>
+                            <th>Date of Inspection</th>
+                            <td>:</td>
+                            <td><input type="date"></td>
+                        </tr>
+                    </table>
+                    
+                    <table>
+                        <tr>
+                            <th>Surveyor Name</th>
+                            <td style="width: 10px">:</td>
+                            <td><input type="text" placeholder="Enter surveyor name"></td>
+                        </tr>
+                        <tr>
+                            <th>Designation</th>
+                            <td>:</td>
+                            <td><input type="text" placeholder="Enter designation"></td>
+                        </tr>
+                        <tr>
+                            <th>NID Number</th>
+                            <td>:</td>
+                            <td><input type="text" placeholder="Enter NID number"></td>
+                        </tr>
+                        <tr>
+                            <th>Contact Number</th>
+                            <td>:</td>
+                            <td><input type="text" placeholder="Enter contact number"></td>
+                        </tr>
+                    </table>
+                </div>
+                
+                <div class="two-column">
+                    <div class="address-box">
+                        <h3>Submitted by:</h3>
+                        <p><strong>AMK Associates Limited</strong></p>
+                        <p>68, Khilgaon Chowdhurypara (4th floor)</p>
+                        <p>DIT Road, Rampura, Dhaka-1219</p>
+                        <p>E-mail: amkassociatesbd@gmail.com</p>
+                        <p>Website: www.amkassociatesltd.com</p>
+                        <p>Contact: +88 01841-132714</p>
+                    </div>
+                    
+                    <div class="address-box">
+                        <h3>Submitted to:</h3>
+                        <input type="text" id="input-recipient-name" placeholder="Recipient Name" oninput="syncRecipientData()" style="font-weight: bold; margin-bottom: 5px; border: 1px solid #ccc; padding: 2px; width: 100%;">
+                        <textarea id="input-recipient-address" placeholder="Designation&#10;Bank Name&#10;Address Line 1&#10;Address Line 2&#10;Contact Info" oninput="syncRecipientData()" style="height: 120px; width: 100%; border: 1px solid #ccc; padding: 2px; font-family: inherit;"></textarea>
+                    </div>
+                </div>
             </div>
             
-            <!-- SUBMITTED TO BOX -->
-            <div class="address-box">
-                <h3>Submitted to:</h3>
-                <input type="text" id="input-recipient-name" placeholder="Recipient Name" oninput="syncRecipientData()" style="font-weight: bold; margin-bottom: 5px; border: 1px solid #ccc; padding: 2px; width: 100%;">
-                <textarea id="input-recipient-address" placeholder="Designation&#10;Bank Name&#10;Address Line 1&#10;Address Line 2&#10;Contact Info" oninput="syncRecipientData()" style="height: 120px; width: 100%; border: 1px solid #ccc; padding: 2px; font-family: inherit;"></textarea>
+            <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
+        </div>
+
+        <!-- ==================== PAGE 2 ==================== -->
+        <div class="sheet">
+            <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+            
+            <div class="sheet-content">
+                <div style="margin: 20px 0;">
+                    <p>Ref.: <input type="text" style="width: 150px; display: inline-block;" placeholder="e.g., AMK/EBPLC/2025/..."></p>
+                    <p>Date: <input type="date" style="width: 200px; display: inline-block;"></p>
+                </div>
+                
+                <div style="margin: 0px 0;">
+                    <p><strong id="output-recipient-name"></strong></p>
+                    <p id="output-recipient-address" style="white-space: pre-wrap; margin-top: 0; line-height: 1.4;"></p>
+                </div>
+                
+                <div style="margin: 0px 0;">
+                    <p><strong>Subject: Inspection, Survey & Valuation Report on Land with Building</strong></p>
+                    <p><strong>Ref. A/C Name: <input type="text" style="width: 300px; display: inline-block; font-weight: bold;" placeholder="Enter A/C name"></strong></p>
+                </div>
+                
+                <p>Dear Sir,</p>
+                <p>Greetings from AMK Associates Limited and Thank You very much for referring us!</p>
+                <p style="text-align: justify;">Pursuant to your communication through <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter medium">, dated: <input type="date" style="width: 100px; display: inline-block;"> by Mr./Ms. <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter name">, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Total Land Area (Decimal)</th>
+                            <th>Present Rate per Decimal (BDT)</th>
+                            <th>Land Value (BDT)</th>
+                            <th>Building Value (BDT)</th>
+                            <th>Total Value (BDT)</th>
+                        </tr>
+                        <tr>
+                            <th></th>
+                            <th class="formula">a</th>
+                            <th class="formula">b</th>
+                            <th class="formula">c=a*b</th>
+                            <th class="formula">d</th>
+                            <th class="formula">e=c+d</th>
+                        </tr>
+                    </thead>
+                    <tbody id="valuation-table">
+                        <tr>
+                            <td>Present Market Value</td>
+                            <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
+                            <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
+                        </tr>
+                        <tr>
+                            <td>Forced Sale Value (20% less)</td>
+                            <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
+                            <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
+                        </tr>
+                        <tr>
+                            <td>Mouza Value</td>
+                            <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
+                            <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
+                            <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
+                <p>Detail Report and necessary attachments are enclosed herewith for your record and perusal.</p>
+                <p>For any query, please feel free to contact us.</p>
+                <p>With best regards,</p>
+                
+                <div style="margin: 20px 20px 0;">
+                    <table style="border: none;">
+                        <tr>
+                            <td style="border: none; width: 40%;">
+                                <div style="border-top: 1px solid #000; width: 80%; padding-top: 5px;">
+                                    <p style="font-weight: bold;">Engr. Abdullah Al Rafi</p>
+                                    <p>Executive- Inspection, Survey & Valuation</p>
+                                </div>
+                            </td>
+                            <td style="border: none; width: 20%;"></td>
+                            <td style="border: none; width: 40%;">
+                                <div style="border-top: 1px solid #000; width: 80%; padding-top: 5px;">
+                                    <p style="font-weight: bold;">Md. Rashed Hossain</p>
+                                    <p>Manager & Unit-In-Charge: ISV</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="two-column">
+                <div class="note">
+                    <p><strong>Encl:</strong></p>
+                    <ol style="padding-left: 20px;">
+                        <li>Annexure-I: Photograph of Property</li>
+                        <li>Annexure-II: Hand Sketch Map</li>
+                        <li>Annexure-III: Mouza Map</li>
+                        <li>Annexure-IV: Location on Google Map</li>
+                    </ol>
+                </div>
+                <div class="note">
+                    <ol start="5">
+                        <li>Annexure-V: QR Code for video of the Property</li>
+                        <li>Annexure-VI: QR Code for Map of the Property</li>
+                        <li>Annexure-VII: SRO Mouza Value</li>
+                        <li>Annexure-VIII: Status In Area Master Plan</li>
+                    </ol>
+                </div>
+                </div>
             </div>
+            
+            <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
         </div>
-        <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 1 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
 
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 2 -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- Example: src="https://raw.githubusercontent.com/your-username/repo/main/header.png" -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-        
-        <div style="margin: 20px 0;">
-            <p>Ref.: <input type="text" style="width: 150px; display: inline-block;" placeholder="e.g., AMK/EBPLC/2025/..."></p>
-            <p>Date: <input type="date" style="width: 200px; display: inline-block;"></p>
-        </div>
-        
-        <!-- LETTER BODY RECIPIENT SECTION -->
-        <div style="margin: 0px 0;">
-            <p><strong id="output-recipient-name"></strong></p>
-            <p id="output-recipient-address" style="white-space: pre-wrap; margin-top: 0; line-height: 1.4;"></p>
-        </div>
-        
-        <div style="margin: 0px 0;">
-            <p><strong>Subject: Inspection, Survey & Valuation Report on Land with Building</strong></p>
-            <p><strong>Ref. A/C Name: <input type="text" style="width: 300px; display: inline-block; font-weight: bold;" placeholder="Enter A/C name"></strong></p>
-        </div>
-        
-        <p>Dear Sir,</p>
-        <p>Greetings from AMK Associates Limited and Thank You very much for referring us!</p>
-        <p style="text-align: justify;">Pursuant to your communication through <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter medium">, dated: <input type="date" style="width: 100px; display: inline-block;"> by Mr./Ms. <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter name">, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
-        
-        <table>
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Total Land Area (Decimal)</th>
-                    <th>Present Rate per Decimal (BDT)</th>
-                    <th>Land Value (BDT)</th>
-                    <th>Building Value (BDT)</th>
-                    <th>Total Value (BDT)</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th class="formula">a</th>
-                    <th class="formula">b</th>
-                    <th class="formula">c=a*b</th>
-                    <th class="formula">d</th>
-                    <th class="formula">e=c+d</th>
-                </tr>
-            </thead>
-            <tbody id="valuation-table">
-                <tr>
-                    <td>Present Market Value</td>
-                    <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
-                    <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
-                </tr>
-                <tr>
-                    <td>Forced Sale Value (20% less)</td>
-                    <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
-                    <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
-                </tr>
-                <tr>
-                    <td>Mouza Value</td>
-                    <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
-                    <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
-                    <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
-                </tr>
-            </tbody>
-        </table>
-        
-        <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
-        <p>Detail Report and necessary attachments are enclosed herewith for your record and perusal.</p>
-        <p>For any query, please feel free to contact us.</p>
-        <p>With best regards,</p>
-        
-        <div style="margin: 20px 20px 0;">
-            <table style="border: none;">
-                <tr>
-                    <td style="border: none; width: 40%;">
-                        <div style="border-top: 1px solid #000; width: 80%; padding-top: 5px;">
-                            <p style="font-weight: bold;">Engr. Abdullah Al Rafi</p>
-                            <p>Executive- Inspection, Survey & Valuation</p>
-                        </div>
-                    </td>
-                    <td style="border: none; width: 20%;"></td>
-                    <td style="border: none; width: 40%;">
-                        <div style="border-top: 1px solid #000; width: 80%; padding-top: 5px;">
-                            <p style="font-weight: bold;">Md. Rashed Hossain</p>
-                            <p>Manager & Unit-In-Charge: ISV</p>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div class="two-column">
-        <div class="note">
-            <p><strong>Encl:</strong></p>
-            <ol style="padding-left: 20px;">
-                <li>Annexure-I: Photograph of Property</li>
-                <li>Annexure-II: Hand Sketch Map</li>
-                <li>Annexure-III: Mouza Map</li>
-                <li>Annexure-IV: Location on Google Map</li>
-            </ol>
-        </div>
-        <div class="note">
-            <ol start="5">
-                <li>Annexure-V: QR Code for video of the Property</li>
-                <li>Annexure-VI: QR Code for Map of the Property</li>
-                <li>Annexure-VII: SRO Mouza Value</li>
-                <li>Annexure-VIII: Status In Area Master Plan</li>
-            </ol>
-        </div>
-        </div>
-        <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 2 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
-
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-        
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 3  -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <h2>Summary of the Valuation Report</h2>
-        
-        <table>
-            <tr>
-                <th style="width: 30%;">File receiving date</th>
-                <td style="width: 10px;">:</td>
-                <td><input type="date"></td>
-            </tr>
-            <tr>
-                <th>Valuation Ref No.</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter valuation ref no"></td>
-            </tr>
-            <tr>
-                <th>Valuation date</th>
-                <td>:</td>
-                <td><input type="date"></td>
-            </tr>
-            <tr>
-                <th>Property location</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter property location"></td>
-            </tr>
-            <tr>
-                <th>Valuation conducted by</th>
-                <td>:</td>
-                <td><textarea placeholder="Enter details">AMK Associates Limited</textarea></td>
-            </tr>
-        </table>
-        
-        <table>
-            <tr>
-                <th style="width: 30%;">Surveyor Name</th>
-                <td style="width: 10px;">:</td>
-                <td><input type="text" placeholder="Enter surveyor name"></td>
-            </tr>
-            <tr>
-                <th>Designation</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter designation"></td>
-            </tr>
-            <tr>
-                <th>NID Number</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter NID number"></td>
-            </tr>
-            <tr>
-                <th>Contact Number</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter contact number"></td>
-            </tr>
-        </table>
-        
-        <table>
-            <tr>
-                <th style="width: 30%;">Type of property</th>
-                <td style="width: 10px;">:</td>
-                <td>
-                    <select>
-                        <option value="">Select type</option>
-                        <option value="Freehold">Freehold</option>
-                        <option value="Leasehold">Leasehold</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <th>Type of Property seller</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter seller type (e.g., Private)"></td>
-            </tr>
-            <tr>
-                <th>Current Market Value</th>
-                <td>:</td>
-                <td>BDT <input type="number" style="width: 80%; display: inline-block;" placeholder="Enter amount"></td>
-            </tr>
-            <tr>
-                <th>Forced Sale Value</th>
-                <td>:</td>
-                <td>BDT <input type="number" style="width: 80%; display: inline-block;" placeholder="Enter amount"></td>
-            </tr>
-            <tr>
-                <th>Deviation (Plinth)</th>
-                <td>:</td>
-                <td><input type="number" style="width: 50px; display: inline-block;" placeholder="0"> %</td>
-            </tr>
-            <tr>
-                <th>Deviation (Floor)</th>
-                <td>:</td>
-                <td><input type="text" placeholder="Enter range (e.g., 1 to 5)"></td>
-            </tr>
-        </table>
-
-        <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 3 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
-
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 4  -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-        
-        <!-- SECTION A -->
-        <h2>A. Particulars of Account:</h2>
-        <table>
-            <tr><th style="width: 30%;">A/C Name</th><td style="width: 10px;">:</td><td><input type="text"></td></tr>
-            <tr><th>Office/Business Address</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Factory Address</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Nature of Business</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Age of Business</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Organization Type</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Contact Person Name</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Mobile Number</th><td>:</td><td><input type="text"></td></tr>
-        </table>
-
-        <!-- SECTION B -->
-        <h2>B. Particulars of Property Owner:</h2>
-        <table>
-            <tr><th style="width: 30%;">Property Owner(s) Name</th><td style="width: 10px;">:</td><td><input type="text"></td></tr>
-            <tr><th>Father's Name</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Mother's Name</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Present Address</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Permanent Address</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Contact Number</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>NID Number</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Relationship with Borrower</th><td>:</td><td><input type="text"></td></tr>
-        </table>
-        
-        <div class="page-break"></div>
-
-        <!-- SECTION C -->
-        <h2>C. Schedule of Property:</h2>
-        <table>
-            <tr><th style="width: 30%;">District</th><td style="width: 10px;">:</td><td><input type="text"></td></tr>
-            <tr><th>Thana / Upazila</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Mouza</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>JL No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Local Authority</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Land Office</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Sub-Register Office</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Khatian No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Corresponding Dag No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Deed Number & Date</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Mutation Khatian No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Jote No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>DCR No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>GRR No.</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Land Type (LDTR)</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Property Address</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Last Ownership Transfer</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Total Area (Deed)</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Total Area (Physical)</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Way to visit Property</th><td>:</td><td><textarea></textarea></td></tr>
-        </table>
-
-        <!-- SECTION D -->
-        <h2>D. Property Identification:</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Direction</th>
-                    <th>Chowhoddi as Per Deed</th>
-                    <th>Present Chowhoddi</th>
-                    <th>Demarcation</th>
-                    <th>Access Road</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><th>North</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>South</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>East</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>West</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            </tbody>
-        </table>
-        <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 1 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
-
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-
-
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 5  -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- SECTION E -->
-        <h2>E. Other Features of Property:</h2>
-        <table>
-            <tr><th style="width: 40%;">Electricity</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>GAS</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Water Supply</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Sewerage System</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Internet</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Satellite / Google Location</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Status of access Road</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Nature of Land</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Type of Land</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Plot Location</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Description of Property</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Usage Restriction</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Flood Possibility</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Classification of Land</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Status in Master Plan</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Current Possession</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Public Establishments nearby</th><td>:</td><td><textarea></textarea></td></tr>
-            <tr><th>Distance to Prominent loc</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Distance to Main Road</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Distance to Branch/Office</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Annual Income from Property</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Present Use of Property</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Future Prospect</th><td>:</td><td><textarea></textarea></td></tr>
-        </table>
-
-        <div class="page-break"></div>
-
-        <!-- SECTION F -->
-        <h2>F. Civil Construction of Property:</h2>
-        <table>
-            <tr><th style="width: 40%;">Structure Type</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Foundation Type</th><td>:</td><td><input type="text"></td></tr>
-            <tr>
-                <th>Number of Stories</th><td>:</td>
-                <td>
-                    As per Plan: <input type="number" style="width: 60px; display: inline-block;" placeholder="0"> Storied<br>
-                    As per Physical: <input type="number" style="width: 60px; display: inline-block;" placeholder="0"> Storied
-                </td>
-            </tr>
-            <tr><th>Approval Authority</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Plan No. & Date</th><td>:</td><td>Sarok: <input type="text" style="width: 30%; display: inline-block;">, Date: <input type="date" style="width: 30%; display: inline-block;"></td></tr>
-            <tr><th>Occupancy Category</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Age of Structure</th><td>:</td><td><input type="number" style="width: 60px; display: inline-block;"> Years</td></tr>
-            <tr><th>Shape of Building</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Project Name</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Developer's Name</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Owner’s Name in Plan</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Security Guards</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Commercial</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Garden Area/Play Zone</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Generator Facilities</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Lift Facilities</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>CCTV</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Fire Fighting & Emergency</th><td>:</td><td><input type="text"></td></tr>
-            <tr><th>Front Face of Structure</th><td>:</td><td><input type="text"></td></tr>
-        </table>
-
-        <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 1 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
-
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 6  -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Floor Area Table -->
-        <table>
-            <tr>
-                <th>Floor</th>
-                <th>Area as per Plan (Sft.)</th>
-                <th>Area as per Physical (Sft.)</th>
-                <th>Deviation (Sft.)</th>
-                <th>Deviation (%)</th>
-            </tr>
-            <!-- Generating Rows 1-9 using a loop logic is not available in HTML, so written out -->
-            <tr><th>Ground Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>1<sup>st</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>2<sup>nd</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>3<sup>rd</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>4<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>5<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>6<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>7<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>8<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            <tr><th>9<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-        </table>
-
-        <!-- Floor Details Table -->
-        <div style="overflow-x: auto;">
-            <table>
-                <thead>
+        <!-- ==================== PAGE 3 ==================== -->
+        <div class="sheet">
+            <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+            
+            <div class="sheet-content">
+                <h2>Summary of the Valuation Report</h2>
+                
+                <table>
                     <tr>
-                        <th>Particulars</th>
-                        <th>G. Fl</th><th>1st</th><th>2nd</th><th>3rd</th><th>4th</th><th>5th</th><th>6th</th><th>7th</th><th>8th</th><th>9th</th>
+                        <th style="width: 30%;">File receiving date</th>
+                        <td style="width: 10px;">:</td>
+                        <td><input type="date"></td>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr><th>Unit (Plan)</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                    <tr><th>Unit (Phys)</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                    <tr><th>Rooms</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                    <tr><th>Bathrooms</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                    <tr><th>Balconies</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                    <tr><th>Dining</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                </tbody>
-            </table>
+                    <tr>
+                        <th>Valuation Ref No.</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter valuation ref no"></td>
+                    </tr>
+                    <tr>
+                        <th>Valuation date</th>
+                        <td>:</td>
+                        <td><input type="date"></td>
+                    </tr>
+                    <tr>
+                        <th>Property location</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter property location"></td>
+                    </tr>
+                    <tr>
+                        <th>Valuation conducted by</th>
+                        <td>:</td>
+                        <td><textarea placeholder="Enter details">AMK Associates Limited</textarea></td>
+                    </tr>
+                </table>
+                
+                <table>
+                    <tr>
+                        <th style="width: 30%;">Surveyor Name</th>
+                        <td style="width: 10px;">:</td>
+                        <td><input type="text" placeholder="Enter surveyor name"></td>
+                    </tr>
+                    <tr>
+                        <th>Designation</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter designation"></td>
+                    </tr>
+                    <tr>
+                        <th>NID Number</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter NID number"></td>
+                    </tr>
+                    <tr>
+                        <th>Contact Number</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter contact number"></td>
+                    </tr>
+                </table>
+                
+                <table>
+                    <tr>
+                        <th style="width: 30%;">Type of property</th>
+                        <td style="width: 10px;">:</td>
+                        <td>
+                            <select>
+                                <option value="">Select type</option>
+                                <option value="Freehold">Freehold</option>
+                                <option value="Leasehold">Leasehold</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Type of Property seller</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter seller type (e.g., Private)"></td>
+                    </tr>
+                    <tr>
+                        <th>Current Market Value</th>
+                        <td>:</td>
+                        <td>BDT <input type="number" style="width: 80%; display: inline-block;" placeholder="Enter amount"></td>
+                    </tr>
+                    <tr>
+                        <th>Forced Sale Value</th>
+                        <td>:</td>
+                        <td>BDT <input type="number" style="width: 80%; display: inline-block;" placeholder="Enter amount"></td>
+                    </tr>
+                    <tr>
+                        <th>Deviation (Plinth)</th>
+                        <td>:</td>
+                        <td><input type="number" style="width: 50px; display: inline-block;" placeholder="0"> %</td>
+                    </tr>
+                    <tr>
+                        <th>Deviation (Floor)</th>
+                        <td>:</td>
+                        <td><input type="text" placeholder="Enter range (e.g., 1 to 5)"></td>
+                    </tr>
+                </table>
+            </div>
+            
+            <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
         </div>
 
-        <h2>G. Setback Comparison:</h2>
-        <table>
-            <thead>
-                <tr><th>Direction</th><th>Plan (Ft.)</th><th>Physical (Ft.)</th><th>Deviation (Ft.)</th></tr>
-            </thead>
-            <tbody>
-                <tr><th>North</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                <tr><th>South</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                <tr><th>East</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                <tr><th>West</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                <tr><th>Road (N/S)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                <tr><th>Road (E/W)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-            </tbody>
-        </table>
+        <!-- ==================== PAGE 4 ==================== -->
+        <div class="sheet">
+            <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
+            
+            <div class="sheet-content">
+                <h2>A. Particulars of Account:</h2>
+                <table>
+                    <tr><th style="width: 30%;">A/C Name</th><td style="width: 10px;">:</td><td><input type="text"></td></tr>
+                    <tr><th>Office/Business Address</th><td>:</td><td><textarea></textarea></td></tr>
+                    <tr><th>Factory Address</th><td>:</td><td><textarea></textarea></td></tr>
+                    <tr><th>Nature of Business</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Age of Business</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Organization Type</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Contact Person Name</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Mobile Number</th><td>:</td><td><input type="text"></td></tr>
+                </table>
 
-        <h2>H. Construction Percentage:</h2>
-        <div style="overflow-x: auto;">
-            <table>
-                <tr>
-                    <th>Floor</th><th>Structure</th><th>Brick</th><th>Plaster</th><th>Paint</th><th>Electric</th><th>Sanitary</th><th>Completion %</th>
-                </tr>
-                <tr><th>Ground</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>1st</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>2nd</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>3rd</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>4th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>5th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>6th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>7th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>8th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                <tr><th>9th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-            </table>
-            </table>
+                <h2>B. Particulars of Property Owner:</h2>
+                <table>
+                    <tr><th style="width: 30%;">Property Owner(s) Name</th><td style="width: 10px;">:</td><td><input type="text"></td></tr>
+                    <tr><th>Father's Name</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Mother's Name</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Present Address</th><td>:</td><td><textarea></textarea></td></tr>
+                    <tr><th>Permanent Address</th><td>:</td><td><textarea></textarea></td></tr>
+                    <tr><th>Contact Number</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>NID Number</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Relationship with Borrower</th><td>:</td><td><input type="text"></td></tr>
+                </table>
+            </div>
+            
+            <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
         </div>
-        <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 6 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
 
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE START - PAGE 7  -->
-        <!-- INSTRUCTION: Replace 'AMK Header.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
-        
-        <!-- ================================================================================== -->
-        <!-- HEADER IMAGE END -->
-        <!-- ================================================================================== -->
-        <h2>Price Justification & Declaration:</h2>
-        <p style="text-align: justify; font-size: 13px;">
-            <strong>Price Justification:</strong> Physical inspection and measure, Interview with local people, Market price of recent transfer of property...
-        </p>
-        <p style="text-align: justify; font-size: 13px; margin-top: 10px;">
-            <strong>Declaration:</strong> The valuation has been performed based on our physical inspection, verification, local market analysis and assessment to the best of our knowledge...
-        </p>
-    </div>
-    <!-- Spacer pushes footer to bottom -->
-            <div class="content-spacer"></div>
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE START - PAGE 7 -->
-        <!-- INSTRUCTION: Replace 'AMK Footer.png' below with your actual Image URL -->
-        <!-- ================================================================================== -->
-        
-        <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
-
-        <!-- ================================================================================== -->
-        <!-- FOOTER IMAGE END -->
-        <!-- ================================================================================== -->
-
-        <!-- Page Break for PDF -->
-        <div class="page-break"></div>
-
-    <!-- CONTROL BAR (Floating at Bottom) -->
-    <div class="control-bar">
-        <button class="btn btn-preview" onclick="togglePreview()" id="btn-preview">
-            <i class="fas fa-eye"></i> Preview Report
-        </button>
-        <button class="btn btn-edit" onclick="togglePreview()" id="btn-edit">
-            <i class="fas fa-pen"></i> Edit Report
-        </button>
-        <button class="btn btn-download" onclick="downloadPDF()">
-            <i class="fas fa-file-pdf"></i> Download PDF Report
-        </button>
-        <button class="btn btn-clear" onclick="clearForm()">
-            <i class="fas fa-trash"></i> Clear Form
-        </button>
-    </div>
-
-    <script>
-        // --- 1. CALCULATIONS ---
-        function calculateValuation() {
-            const rows = document.querySelectorAll("#valuation-table tr");
+        <!-- ==================== PAGE 5 ==================== -->
+        <div class="sheet">
+            <img src="AMK Header.png" class="report-header-img" alt="Report Header" crossorigin="anonymous">
             
-            rows.forEach(row => {
-                const area = parseFloat(row.querySelector(".calc-land-area").value) || 0;
-                const rate = parseFloat(row.querySelector(".calc-rate").value) || 0;
-                const buildVal = parseFloat(row.querySelector(".calc-build-val").value) || 0;
-                
-                const landVal = area * rate;
-                const totalVal = landVal + buildVal;
-                
-                row.querySelector(".calc-land-val").value = landVal.toFixed(2);
-                row.querySelector(".calc-total").value = totalVal.toFixed(2);
-            });
-        }
-        
-        // --- 2. SYNC RECIPIENT INFO ---
-        function syncRecipientData() {
-            const nameInput = document.getElementById('input-recipient-name');
-            const addressInput = document.getElementById('input-recipient-address');
+            <div class="sheet-content">
+                <h2>C. Schedule of Property:</h2>
+                <table>
+                    <tr><th style="width: 30%;">District</th><td style="width: 10px;">:</td><td><input type="text"></td></tr>
+                    <tr><th>Thana / Upazila</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Mouza</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>JL No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Local Authority</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Land Office</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Sub-Register Office</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Khatian No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Corresponding Dag No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Deed Number & Date</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Mutation Khatian No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Jote No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>DCR No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>GRR No.</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Land Type (LDTR)</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Property Address</th><td>:</td><td><textarea></textarea></td></tr>
+                    <tr><th>Last Ownership Transfer</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Total Area (Deed)</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Total Area (Physical)</th><td>:</td><td><input type="text"></td></tr>
+                    <tr><th>Way to visit Property</th><td>:</td><td><textarea></textarea></td></tr>
+                </table>
+
+                <h2>D. Property Identification:</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Direction</th>
+                            <th>Chowhoddi as Per Deed</th>
+                            <th>Present Chowhoddi</th>
+                            <th>Demarcation</th>
+                            <th>Access Road</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><th>North</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><th>South</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><th>East</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr><th>West</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                    </tbody>
+                </table>
+            </div>
             
-            document.getElementById('output-recipient-name').innerText = nameInput.value;
-            document.getElementById('output-recipient-address').innerText = addressInput.value;
-        }
+            <img src="AMK Footer.png" class="report-footer-img" alt="Report Footer" crossorigin="anonymous">
+        </div>
 
-        // --- 3. PREVIEW MODE LOGIC ---
-        function togglePreview() {
-            const body = document.body;
-            const btnPreview = document.getElementById('btn-preview');
-            const btnEdit = document.getElementById('btn-edit');
-
-            body.classList.toggle('preview-mode');
-
-            if (body.classList.contains('preview-mode')) {
-                // Switch to Preview
-                btnPreview.style.display = 'none';
-                btnEdit.style.display = 'flex';
-                
-                // Optional: Scroll to top to see the document
-                window.scrollTo(0, 0);
-            } else {
-                // Switch back to Edit
-                btnPreview.style.display = 'flex';
-                btnEdit.style.display = 'none';
-            }
-        }
-
-        // --- 4. DOWNLOAD PDF LOGIC ---
-        function downloadPDF() {
-            const element = document.getElementById('report-content');
-            
-            // 1. Temporary: Convert all inputs to text spans for accurate PDF rendering
-            // This fixes the "empty table" issue by ensuring html2pdf sees text, not form fields.
-            const inputs = element.querySelectorAll('input, textarea, select');
-            const originalDisplay = [];
-
-            inputs.forEach((input, index) => {
-                // Save original display style
-                originalDisplay[index] = input.style.display;
-
-                // Create text node
-                const span = document.createElement('span');
-                span.className = 'pdf-text-replacement'; // Tag for easy removal
-                
-                // Get value
-                let value = input.value;
-                if (input.tagName === 'SELECT') {
-                    value = input.options[input.selectedIndex].text;
-                    if (value === 'Select type') value = '';
-                }
-                
-                // Handle empty values to preserve layout height
-                if (!value) value = '\u00A0'; // Non-breaking space
-                
-                span.textContent = value;
-                
-                // Copy styling (font size, weight, alignment)
-                const style = window.getComputedStyle(input);
-                span.style.fontFamily = style.fontFamily;
-                span.style.fontSize = style.fontSize;
-                span.style.fontWeight = style.fontWeight;
-                span.style.textAlign = style.textAlign;
-                span.style.display = 'inline-block';
-                span.style.whiteSpace = 'pre-wrap';
-                span.style.wordBreak = 'break-word';
-                span.style.width = input.scrollWidth + 'px';
-                
-                // Ensure multiline for textareas
-                //if (input.tagName === 'TEXTAREA') {
-                //    span.style.whiteSpace = 'pre-wrap';
-                //}
-
-                // Hide input, show span
-                input.style.display = 'none';
-                input.parentNode.insertBefore(span, input);
-            });
-
-            // Configuration for html2pdf
-            const opt = {
-                margin:       [10, 10, 10, 10], // Better margins
-                filename:     'EBL_Valuation_Report.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                pagebreak:    { mode: ['avoid-all', 'css', 'legacy'] } // Improved page breaking
-            };
-
-            // Generate
-            html2pdf().set(opt).from(element).save().then(function() {
-                // Revert changes: Remove spans, show inputs
-                const replacements = element.querySelectorAll('.pdf-text-replacement');
-                replacements.forEach(span => span.remove());
-                
-                inputs.forEach((input, index) => {
-                    input.style.display = originalDisplay[index];
-                });
-            });
-        }
-
-        // --- 5. CLEAR FORM LOGIC ---
-        function clearForm() {
-            if(confirm("Are you sure you want to clear all data?")) {
-                const inputs = document.querySelectorAll("input, textarea, select");
-                inputs.forEach(input => input.value = "");
-                
-                // Reset outputs
-                document.getElementById('output-recipient-name').innerText = "";
-                document.getElementById('output-recipient-address').innerText = "";
-            }
-        }
-    </script>
-</body>
-</html>
+        <!-- ==================== PAGE 6 ==================== -->
