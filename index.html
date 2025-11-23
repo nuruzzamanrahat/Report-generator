@@ -1007,7 +1007,32 @@
             <li>Average life of concrete structure has been considered as 70 Years. </li>
         </ol>
     </p>
-    <p>As this structure is <input type="text" style="width: 20px; display: inline-block;">-year-old, thus the Depreciation is considered as (100/70) x <input type="text" style="width: 20px; display: inline-block;"> = <input type="text" style="width: 20px; display: inline-block;"> &cong;<input type="text" style="width: 20px; display: inline-block;">%. </p>
+    <p>
+    As this structure is 
+    <input id="year" type="number" style="width: 40px; display: inline-block;">-year-old, 
+    thus the Depreciation is considered as (100/70) × 
+    <input id="year2" type="text" style="width: 40px; display: inline-block;" readonly> 
+    = 
+    <input id="result" type="text" style="width: 40px; display: inline-block;" readonly> 
+    &cong;
+    <input id="percent" type="text" style="width: 40px; display: inline-block;" readonly>%.
+</p>
+
+<script>
+document.getElementById("year").addEventListener("input", function () {
+    const year = parseFloat(this.value) || 0;
+
+    // Copy year
+    document.getElementById("year2").value = year;
+
+    // Exact depreciation
+    const depreciation = (100 / 70) * year;
+    document.getElementById("result").value = depreciation.toFixed(2);
+
+    // Final output (integer)
+    document.getElementById("percent").value = Math.round(depreciation);
+});
+</script>
             <h2>Price Justification:</h2>
                 <textarea></textarea>
             </div>
