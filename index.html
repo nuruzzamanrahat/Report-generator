@@ -44,25 +44,21 @@
             overflow: hidden;
         }
 
-        /* --- PDF GENERATION OVERRIDES (The Fix) --- */
-        /* These styles only apply when the .pdf-mode class is added by JS */
+        /* --- PDF GENERATION OVERRIDES --- */
         .report-wrapper.pdf-mode {
             gap: 0 !important;
         }
 
         .report-wrapper.pdf-mode .sheet {
-            /* Reduce height slightly to prevent overflow-triggered double page breaks */
             height: 296mm !important; 
             width: 210mm !important;
             box-shadow: none !important;
             margin: 0 !important;
             border: none !important;
-            /* Force the break after this element */
             page-break-after: always !important;
             page-break-inside: avoid !important;
         }
 
-        /* Stop the last page from creating a trailing blank page */
         .report-wrapper.pdf-mode .sheet:last-child {
             page-break-after: auto !important;
         }
@@ -203,6 +199,134 @@
             overflow-x: auto;
         }
 
+        /* --- PHOTO PAGE STYLES --- */
+        .photo-page-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-evenly; 
+            height: 100%;
+            padding: 10px 0;
+        }
+
+        .photo-slot {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .photo-frame {
+            width: 100%;
+            height: 90mm; /* Fixed height */
+            border: 2px solid #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #fff;
+            overflow: hidden;
+            margin-bottom: 5px;
+            position: relative; /* Context for absolute button */
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .add-photo-placeholder {
+            width: 100%;
+            height: 90mm;
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #888;
+            background-color: #fcfcfc;
+            transition: 0.3s;
+            margin-bottom: 25px; 
+        }
+
+        .add-photo-placeholder:hover {
+            border-color: #3498db;
+            color: #3498db;
+            background-color: #f0f8ff;
+        }
+
+        .add-photo-placeholder i {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+
+        /* DELETE BUTTON STYLES FIXED */
+        .delete-photo-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: #ff4444;
+            color: white;
+            border: 2px solid white; /* Adding border for visibility on dark images */
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 100; /* Ensure it's on top */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+            outline: none;
+        }
+
+        .delete-photo-btn:hover {
+            transform: scale(1.1);
+            background-color: #cc0000;
+        }
+
+        .photo-title {
+            width: 100%;
+            text-align: center !important;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14px !important;
+            border: none !important;
+            border-bottom: 1px solid transparent !important;
+            padding: 5px !important;
+            background: transparent !important;
+            outline: none;
+        }
+        
+        .photo-title:focus {
+            border-bottom: 1px dashed #ccc !important;
+        }
+        
+        .annexure-header {
+            width: 100%;
+            text-align: left;
+            font-style: italic;
+            text-decoration: underline;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        /* Hide "Add Photo" placeholder in print/PDF mode */
+        .report-wrapper.pdf-mode .add-photo-placeholder {
+            display: none !important;
+        }
+        
+        /* Hide delete buttons in PDF mode */
+        .report-wrapper.pdf-mode .delete-photo-btn {
+            display: none !important;
+        }
+
         /* --- PREVIEW MODE --- */
         body.preview-mode input, 
         body.preview-mode textarea, 
@@ -261,10 +385,15 @@
                 padding: 0;
             }
             .control-bar { display: none; }
+            .add-photo-placeholder { display: none; }
+            .delete-photo-btn { display: none; }
         }
     </style>
 </head>
 <body>
+
+    <!-- Hidden Input for File Upload -->
+    <input type="file" id="image-uploader" multiple accept="image/png, image/jpeg, image/jpg" style="display: none;">
 
     <!-- WRAPPER FOR ALL SHEETS -->
     <div class="report-wrapper" id="report-content">
@@ -1042,19 +1171,23 @@ document.getElementById("year").addEventListener("input", function () {
 
     </div>
 
+        <!-- ================= PHOTO SHEETS ================= -->
+        <!-- Populated via JS -->
+    </div>
+
     <!-- CONTROL BAR -->
     <div class="control-bar">
         <button class="btn btn-preview" onclick="togglePreview()" id="btn-preview">
-            <i class="fas fa-eye"></i> Preview Report
+            <i class="fas fa-eye"></i> Preview
         </button>
         <button class="btn btn-edit" onclick="togglePreview()" id="btn-edit">
-            <i class="fas fa-pen"></i> Edit Report
+            <i class="fas fa-pen"></i> Edit
         </button>
         <button class="btn btn-download" onclick="downloadPDF()">
             <i class="fas fa-file-pdf"></i> Download PDF
         </button>
         <button class="btn btn-clear" onclick="clearForm()">
-            <i class="fas fa-trash"></i> Clear Form
+            <i class="fas fa-trash"></i> Clear
         </button>
     </div>
 
@@ -1066,10 +1199,8 @@ document.getElementById("year").addEventListener("input", function () {
                 const area = parseFloat(row.querySelector(".calc-land-area").value) || 0;
                 const rate = parseFloat(row.querySelector(".calc-rate").value) || 0;
                 const buildVal = parseFloat(row.querySelector(".calc-build-val").value) || 0;
-                
                 const landVal = area * rate;
                 const totalVal = landVal + buildVal;
-                
                 row.querySelector(".calc-land-val").value = landVal.toFixed(2);
                 row.querySelector(".calc-total").value = totalVal.toFixed(2);
             });
@@ -1079,12 +1210,130 @@ document.getElementById("year").addEventListener("input", function () {
         function syncRecipientData() {
             const nameInput = document.getElementById('input-recipient-name');
             const addressInput = document.getElementById('input-recipient-address');
-            
             document.getElementById('output-recipient-name').innerText = nameInput.value;
             document.getElementById('output-recipient-address').innerText = addressInput.value;
         }
 
-        // --- 3. PREVIEW MODE ---
+        // --- 3. PHOTO MANAGEMENT LOGIC ---
+        
+        let uploadedPhotos = []; 
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPhotoSheets();
+        });
+
+        document.getElementById('image-uploader').addEventListener('change', function(event) {
+            handleFiles(Array.from(event.target.files));
+        });
+
+        function handleDrop(event) {
+            event.preventDefault();
+            if (event.dataTransfer.files && event.dataTransfer.files.length > 0) {
+                handleFiles(Array.from(event.dataTransfer.files));
+            }
+        }
+
+        function handleFiles(files) {
+            if (files.length === 0) return;
+            files.forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedPhotos.push({
+                        src: e.target.result,
+                        title: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " ")
+                    });
+                    renderPhotoSheets();
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+        
+        // Removed the problematic window.deletePhoto function
+
+        window.updatePhotoTitle = function(index, newTitle) {
+            uploadedPhotos[index].title = newTitle;
+        };
+
+        function renderPhotoSheets() {
+            const wrapper = document.getElementById('report-content');
+            
+            // Remove existing photo sheets
+            const existingSheets = document.querySelectorAll('.photo-sheet-dynamic');
+            existingSheets.forEach(sheet => sheet.remove());
+
+            const totalItems = uploadedPhotos.length + 1; 
+            const totalSheets = Math.ceil(totalItems / 2);
+
+            for (let i = 0; i < totalSheets; i++) {
+                const sheet = document.createElement('div');
+                sheet.className = 'sheet photo-sheet-dynamic';
+                
+                sheet.innerHTML = `
+                    <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+                    <div class="sheet-content photo-page-content" id="photo-sheet-content-${i}">
+                        <div class="annexure-header">
+                            ${i === 0 ? 'Annexure-I: Photograph of Property' : 'Annexure-I: Photograph of Property (Contd.)'}
+                        </div>
+                    </div>
+                    <img src="AMK Footer.png" class="report-footer-img" alt="Footer" crossorigin="anonymous">
+                `;
+                
+                wrapper.appendChild(sheet);
+                const contentContainer = document.getElementById(`photo-sheet-content-${i}`);
+
+                const startIndex = i * 2;
+                const endIndex = startIndex + 2; 
+                
+                for (let k = startIndex; k < endIndex; k++) {
+                    if (k < uploadedPhotos.length) {
+                        const photo = uploadedPhotos[k];
+                        const slot = document.createElement('div');
+                        slot.className = 'photo-slot';
+                        
+                        // IMPORTANT: Removed onclick and added data-index attribute for delegation
+                        slot.innerHTML = `
+                            <div class="photo-frame">
+                                <img src="${photo.src}" alt="Property Photo">
+                                <button type="button" class="delete-photo-btn" data-index="${k}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <input type="text" class="photo-title" value="${photo.title}" oninput="updatePhotoTitle(${k}, this.value)">
+                        `;
+                        contentContainer.appendChild(slot);
+                    } else if (k === uploadedPhotos.length) {
+                        const addSlot = document.createElement('div');
+                        addSlot.className = 'photo-slot';
+                        addSlot.innerHTML = `
+                            <div class="add-photo-placeholder" onclick="document.getElementById('image-uploader').click()" ondragover="event.preventDefault()" ondrop="handleDrop(event)">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Add Photo</p>
+                                <span>(Click or Drag & Drop)</span>
+                            </div>
+                        `;
+                        contentContainer.appendChild(addSlot);
+                    }
+                }
+            }
+        }
+        
+        // --- 3B. EVENT DELEGATION FOR DELETE BUTTON (THE FIX) ---
+        document.addEventListener('click', function(event) {
+            const deleteButton = event.target.closest('.delete-photo-btn');
+            if (deleteButton) {
+                event.stopPropagation();
+                // Get the index from the data attribute
+                const index = parseInt(deleteButton.getAttribute('data-index'));
+                
+                if (!isNaN(index) && index >= 0 && confirm("Delete this photo?")) {
+                    uploadedPhotos.splice(index, 1);
+                    renderPhotoSheets();
+                }
+            }
+        });
+
+
+        // --- 4. PREVIEW MODE ---
         function togglePreview() {
             const body = document.body;
             const btnPreview = document.getElementById('btn-preview');
@@ -1102,20 +1351,20 @@ document.getElementById("year").addEventListener("input", function () {
             }
         }
 
-        // --- 4. DOWNLOAD PDF ---
+        // --- 5. DOWNLOAD PDF ---
         function downloadPDF() {
             const element = document.getElementById('report-content');
             const wrapper = document.querySelector('.report-wrapper');
             
-            // 1. ADD PDF MODE CLASS (Removes gaps and adjusts margins)
             wrapper.classList.add('pdf-mode');
 
-            // 2. Text replacement logic for inputs
             const inputs = element.querySelectorAll('input, textarea, select');
             const originalDisplay = [];
 
             inputs.forEach((input, index) => {
                 originalDisplay[index] = input.style.display;
+                if(input.type === 'file') return;
+
                 const span = document.createElement('span');
                 span.className = 'pdf-text-replacement'; 
                 
@@ -1134,7 +1383,14 @@ document.getElementById("year").addEventListener("input", function () {
                 span.style.textAlign = style.textAlign;
                 span.style.display = 'inline-block';
                 span.style.whiteSpace = 'pre-wrap';
-                span.style.width = input.scrollWidth + 'px';  
+                
+                if(input.classList.contains('photo-title')) {
+                     span.style.width = '100%';
+                     span.style.display = 'block';
+                     span.style.textAlign = 'center';
+                } else {
+                     span.style.width = input.scrollWidth + 'px'; 
+                }
                 
                 input.style.display = 'none';
                 input.parentNode.insertBefore(span, input);
@@ -1146,14 +1402,11 @@ document.getElementById("year").addEventListener("input", function () {
                 image:        { type: 'jpeg', quality: 0.98 },
                 html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
-                // Use CSS only for page breaks, relying on our class overrides
                 pagebreak:    { mode: 'css' } 
             };
 
             html2pdf().set(opt).from(element).save().then(function() {
-                // 3. REMOVE PDF MODE CLASS
                 wrapper.classList.remove('pdf-mode');
-                
                 const replacements = element.querySelectorAll('.pdf-text-replacement');
                 replacements.forEach(span => span.remove());
                 inputs.forEach((input, index) => {
@@ -1162,13 +1415,15 @@ document.getElementById("year").addEventListener("input", function () {
             });
         }
 
-        // --- 5. CLEAR FORM ---
+        // --- 6. CLEAR FORM ---
         function clearForm() {
-            if(confirm("Are you sure you want to clear all data?")) {
-                const inputs = document.querySelectorAll("input, textarea, select");
+            if(confirm("Are you sure you want to clear all data? This includes uploaded photos.")) {
+                const inputs = document.querySelectorAll("input:not([type=file]), textarea, select");
                 inputs.forEach(input => input.value = "");
                 document.getElementById('output-recipient-name').innerText = "";
                 document.getElementById('output-recipient-address').innerText = "";
+                uploadedPhotos = [];
+                renderPhotoSheets();
             }
         }
     </script>
