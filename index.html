@@ -921,89 +921,22 @@
                 <h2>G. Setback Comparison:</h2>
                 <table>
                     <thead>
-                        <tr>
-                            <th rowspan="2">Direction</th>
-                            <th>As Per Approved <br>Plan (Ft.)</th>
-                            <th>As Per Physical <br>Actual (Ft.)</th>
-                            <th>Deviation (Ft.)</th>
-                        </tr>
-                        <tr>
-                            <th class="formula">a</th>
-                            <th class="formula">b</th>
-                            <th class="formula">c = b - a</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="data-row">
-                            <th>North</th>
-                            <td><input type="number" class="val-a"></td>
-                            <td><input type="number" class="val-b"></td>
-                            <td><input type="number" class="val-c" readonly></td>
-                        </tr>
-                        <tr class="data-row">
-                            <th>South</th>
-                            <td><input type="number" class="val-a"></td>
-                            <td><input type="number" class="val-b"></td>
-                            <td><input type="number" class="val-c" readonly></td>
-                        </tr>
-                        <tr class="data-row">
-                            <th>East</th>
-                            <td><input type="number" class="val-a"></td>
-                            <td><input type="number" class="val-b"></td>
-                            <td><input type="number" class="val-c" readonly></td>
-                        </tr>
-                        <tr class="data-row">
-                            <th>West</th>
-                            <td><input type="number" class="val-a"></td>
-                            <td><input type="number" class="val-b"></td>
-                            <td><input type="number" class="val-c" readonly></td>
-                        </tr>
-                        <tr class="data-row">
-                            <th>Road (N/S)</th>
-                            <td><input type="number" class="val-a"></td>
-                            <td><input type="number" class="val-b"></td>
-                            <td><input type="number" class="val-c" readonly></td>
-                        </tr>
-                        <tr class="data-row">
-                            <th>Road (E/W)</th>
-                            <td><input type="number" class="val-a"></td>
-                            <td><input type="number" class="val-b"></td>
-                            <td><input type="number" class="val-c" readonly></td>
-                        </tr>
-                    </tbody>
+                    <tr><th rowspan="2">Direction</th><th>As Per Approved <br>Plan (Ft.)</th><th>As Per Physical <br>Physical (Ft.)</th><th>Deviation (Ft.)</th></tr>
+                    <tr>
+                        <th>a</th>
+                        <th>b</th>
+                        <th>c=b-a</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><th>North</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                    <tr><th>South</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                    <tr><th>East</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                    <tr><th>West</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                    <tr><th>Road (N/S)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                    <tr><th>Road (E/W)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                </tbody>
                 </table>
-                document.addEventListener('DOMContentLoaded', () => {
-                    // Select the table body to use event delegation
-                    const tableBody = document.querySelector('tbody');
-
-                    tableBody.addEventListener('input', (event) => {
-                        // Target only our calculation inputs
-                        if (event.target.classList.contains('val-a') || event.target.classList.contains('val-b')) {
-            
-                            // 1. Find the parent row
-                            const row = event.target.closest('.data-row');
-            
-                            // 2. Get the values of 'a' and 'b'
-                            const a = parseFloat(row.querySelector('.val-a').value) || 0;
-                            const b = parseFloat(row.querySelector('.val-b').value) || 0;
-            
-                            // 3. Calculate deviation (c = b - a)
-                            const deviation = b - a;
-            
-                            // 4. Update the Deviation input (c)
-                            // .toFixed(2) ensures we don't get long floating point decimals
-                            row.querySelector('.val-c').value = deviation.toFixed(2);
-
-                            // Optional: Highlight deviation in red if it's negative (less setback than planned)
-                            if (deviation < 0) {
-                                row.querySelector('.val-c').style.color = 'red';
-                            } else {
-                                row.querySelector('.val-c').style.color = 'black';
-                            }
-                        }
-                    });
-                });
-
                 <h2>H. Construction Percentage:</h2>
                 <div class="table-scroll">
                     <table>
