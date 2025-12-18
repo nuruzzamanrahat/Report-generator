@@ -920,22 +920,57 @@
             <div class="sheet-content">
                 <h2>G. Setback Comparison:</h2>
                 <table>
-                <thead>
-                    <tr><th rowspan="2">Direction</th><th>As Per Approved <br>Plan (Ft.)</th><th>As Per Physical <br>Physical (Ft.)</th><th>Deviation (Ft.)</th></tr>
-                    <tr>
-                        <th class="formula">a</th>
-                        <th class="formula">b</th>
-                        <th class="formula">c=b-a</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><th>North</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>South</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>East</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>West</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>Road (N/S)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>Road (E/W)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                </tbody>
+                    <thead>
+                        <tr>
+                            <th rowspan="2">Direction</th>
+                            <th>As Per Approved <br>Plan (Ft.)</th>
+                            <th>As Per Physical <br>Actual (Ft.)</th>
+                            <th>Deviation (Ft.)</th>
+                        </tr>
+                        <tr>
+                            <th class="formula">a</th>
+                            <th class="formula">b</th>
+                            <th class="formula">c = b - a</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row">
+                            <th>North</th>
+                            <td><input type="number" class="val-a"></td>
+                            <td><input type="number" class="val-b"></td>
+                            <td><input type="number" class="val-c" readonly></td>
+                        </tr>
+                        <tr class="data-row">
+                            <th>South</th>
+                            <td><input type="number" class="val-a"></td>
+                            <td><input type="number" class="val-b"></td>
+                            <td><input type="number" class="val-c" readonly></td>
+                        </tr>
+                        <tr class="data-row">
+                            <th>East</th>
+                            <td><input type="number" class="val-a"></td>
+                            <td><input type="number" class="val-b"></td>
+                            <td><input type="number" class="val-c" readonly></td>
+                        </tr>
+                        <tr class="data-row">
+                            <th>West</th>
+                            <td><input type="number" class="val-a"></td>
+                            <td><input type="number" class="val-b"></td>
+                            <td><input type="number" class="val-c" readonly></td>
+                        </tr>
+                        <tr class="data-row">
+                            <th>Road (N/S)</th>
+                            <td><input type="number" class="val-a"></td>
+                            <td><input type="number" class="val-b"></td>
+                            <td><input type="number" class="val-c" readonly></td>
+                        </tr>
+                        <tr class="data-row">
+                            <th>Road (E/W)</th>
+                            <td><input type="number" class="val-a"></td>
+                            <td><input type="number" class="val-b"></td>
+                            <td><input type="number" class="val-c" readonly></td>
+                        </tr>
+                    </tbody>
                 </table>
                 document.addEventListener('DOMContentLoaded', () => {
                     // Select the table body to use event delegation
