@@ -1430,5 +1430,24 @@ document.getElementById("year").addEventListener("input", function () {
             }
         }
     </script>
+
+//_________WEBHOOK____________
+async function submitReport(data) {
+  const res = await fetch(
+    "https://amkadvisory.app.n8n.cloud/webhook/report-input",
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    }
+  );
+
+  if (!res.ok) {
+    alert("Submission failed");
+  } else {
+    alert("Report data saved successfully");
+  }
+}
+//____________________________
 </body>
 </html>
