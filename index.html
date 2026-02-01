@@ -471,25 +471,89 @@
                         <tr>
                             <th>Surveyor Name</th>
                             <td style="width: 10px">:</td>
-                            <td><input type="text" placeholder="Enter surveyor name"></td>
+                            <td>
+                                <select id="surveyor-select" onchange="autoFillSurveyorDetails()" style="width: 100%;">
+                                    <option value="" disabled selected>Select Surveyor</option>
+                                    <option value="Engr. Abdullah Al Rafi" 
+                                        data-designation="Executive,ISV " 
+                                        data-nid="332 778 6442" 
+                                        data-contact="+880 1847-188078">Engr. Abdullah Al Rafi</option>
+                                    <option value="Md Towhid Islam" 
+                                        data-designation="Senior Officer,ISV" 
+                                        data-nid="600 509 8812" 
+                                        data-contact="+880 1726-966387">Md Towhid Islam</option>
+                                    <option value="Alif Ahmed" 
+                                        data-designation="Assistant Executive,ISV" 
+                                        data-nid="736 299 6725" 
+                                        data-contact="+880 1847-188079">Alif Ahmed</option>
+                                    <option value="MD Junaid Hasan" 
+                                        data-designation="Officer,ISV" 
+                                        data-nid="826 528 3591" 
+                                        data-contact="+880 1756-736743">MD Junaid Hasan</option>
+                                    <option value="Utsha Kar Orka" 
+                                        data-designation="Senior Officer,ISV" 
+                                        data-nid="601 365 5151" 
+                                        data-contact="+880 1760-178876">Utsha Kar Orka</option>
+                                    <option value="Sazzadur Rahman" 
+                                        data-designation="Senior Officer,ISV" 
+                                        data-nid="916 276 6894" 
+                                        data-contact="+880 1758-551583">Sazzadur Rahman</option>
+                                    <option value="Shahriar Alam" 
+                                        data-designation="Officer,ISV" 
+                                        data-nid="286 029 1620" 
+                                        data-contact="+880 1568-788506">Shahriar Alam</option>
+                                    <option value="Md Mesbah Uddin" 
+                                        data-designation="Manager,ISV" 
+                                        data-nid="599 537 0177" 
+                                        data-contact="01830-005171">Md Mesbah Uddin</option> 
+                                    <option value="Md. Sahed Alam" 
+                                        data-designation="Senior Officer,ISV" 
+                                        data-nid="287 252 2319" 
+                                        data-contact="017488-62821">Md Mesbah Uddin</option> 
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <th>Designation</th>
                             <td>:</td>
-                            <td><input type="text" placeholder="Enter designation"></td>
+                            <td><input type="text" id="sur-designation" placeholder="Enter designation" readonly></td>
                         </tr>
                         <tr>
                             <th>NID Number</th>
                             <td>:</td>
-                            <td><input type="text" placeholder="Enter NID number"></td>
+                            <td><input type="text" id="sur-nid" placeholder="Enter NID number" readonly></td>
                         </tr>
                         <tr>
                             <th>Contact Number</th>
                             <td>:</td>
-                            <td><input type="text" placeholder="Enter contact number"></td>
+                            <td><input type="text" id="sur-contact" placeholder="Enter contact number" readonly></td>
                         </tr>
                     </table>
                 </div>
+                /* AUTO FILL SURVEYOR DETAILS*/
+                <script>
+                    function autoFillSurveyorDetails() {
+                        const dropdown = document.getElementById('surveyor-select');
+    
+                        // Target fields
+                        const desigField = document.getElementById('sur-designation');
+                        const nidField = document.getElementById('sur-nid');
+                        const contactField = document.getElementById('sur-contact');
+
+                        // Get the selected option
+                        const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+                        // Extract data from attributes
+                        const designation = selectedOption.getAttribute('data-designation');
+                        const nid = selectedOption.getAttribute('data-nid');
+                        const contact = selectedOption.getAttribute('data-contact');
+
+                        // Fill the fields
+                        desigField.value = designation || "";
+                        nidField.value = nid || "";
+                        contactField.value = contact || "";
+                    }
+                </script>
                 
                 <div class="two-column">
                     <div class="address-box">
