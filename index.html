@@ -639,31 +639,100 @@
                     <tbody id="valuation-table">
                         <tr>
                             <td>Present Market Value</td>
-                            <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
-                            <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
+                            <td><input type="number" step="any" class="calc-land-area" oninput="calculateValuation()" placeholder="0.00"></td>
+                            <td><input type="text" class="calc-rate" oninput="formatAndCalculate(this)" placeholder="0"></td>
+                            <td><input type="text" class="calc-land-val" readonly style="background: #f9f9f9;"></td>
+                            <td><input type="text" class="calc-build-val" oninput="formatAndCalculate(this)" placeholder="0"></td>
+                            <td><input type="text" class="calc-total" readonly style="background: #f9f9f9; font-weight: bold;"></td>
                         </tr>
-                        <tr>
+                        <tr style="background-color: #f2f2f2;">
                             <td>Forced Sale Value (20% less)</td>
-                            <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
-                            <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
+                            <td><input type="number" class="calc-land-area" readonly></td>
+                            <td><input type="text" class="calc-rate" readonly></td>
+                            <td><input type="text" class="calc-land-val" readonly></td>
+                            <td><input type="text" class="calc-build-val" readonly></td>
+                            <td><input type="text" class="calc-total" readonly style="font-weight: bold;"></td>
                         </tr>
                         <tr>
                             <td>Mouza Value</td>
-                            <td><input type="number" class="calc-land-area" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-rate" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-land-val" readonly placeholder="0" style="background: #f9f9f9;"></td>
-                            <td><input type="number" class="calc-build-val" oninput="calculateValuation()" placeholder="0"></td>
-                            <td><input type="number" class="calc-total" readonly placeholder="0" style="background: #f9f9f9; font-weight: bold;"></td>
+                            <td><input type="number" step="any" class="calc-land-area" oninput="calculateValuation()" placeholder="0.00"></td>
+                            <td><input type="text" class="calc-rate" oninput="formatAndCalculate(this)" placeholder="0"></td>
+                            <td><input type="text" class="calc-land-val" readonly style="background: #f9f9f9;"></td>
+                            <td><input type="text" class="calc-build-val" oninput="formatAndCalculate(this)" placeholder="0"></td>
+                            <td><input type="text" class="calc-total" readonly style="background: #f9f9f9; font-weight: bold;"></td>
                         </tr>
                     </tbody>
                 </table>
-                
+                <script>
+                    // Helper to remove commas and return a number
+                    function getRawValue(input) {
+
+                        if (!input) return 0;
+
+                        return parseFloat(input.value.replace(/,/g, '')) || 0;
+                    }
+
+                    // Helper to format integers with commas
+                    function formatNumber(num) {
+
+                        return Math.round(num).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    // Function to format currency as user types
+                    function formatAndCalculate(input) {
+
+                        let value = input.value.replace(/[^0-9]/g, ''); // Remove non-numeric
+
+                        if (value) {
+
+                            input.value = parseInt(value).toLocaleString();
+
+                        }
+
+                        calculateValuation();
+                    }
+
+                    function calculateValuation() {
+
+                        const rows = document.querySelectorAll("#valuation-table tr");
+    
+
+                        // --- STEP 1: Process Present Market Value (Row 0) ---
+                        const r1_area = parseFloat(rows[0].querySelector(".calc-land-area").value) || 0;
+                        const r1_rate = getRawValue(rows[0].querySelector(".calc-rate"));
+                        const r1_build = getRawValue(rows[0].querySelector(".calc-build-val"));
+
+                        const r1_landVal = r1_area * r1_rate;
+                        const r1_total = r1_landVal + r1_build;
+
+                        rows[0].querySelector(".calc-land-val").value = formatNumber(r1_landVal);
+                        rows[0].querySelector(".calc-total").value = formatNumber(r1_total);
+
+                        // --- STEP 2: Process Forced Sale Value (Row 1) - 80% of Row 0 ---
+                        const r2_area = r1_area; // Same area
+                        const r2_rate = r1_rate * 0.8;
+                        const r2_landVal = r1_landVal * 0.8;
+                        const r2_build = r1_build * 0.8;
+                        const r2_total = r1_total * 0.8;
+
+                        rows[1].querySelector(".calc-land-area").value = r2_area || "";
+                        rows[1].querySelector(".calc-rate").value = formatNumber(r2_rate);
+                        rows[1].querySelector(".calc-land-val").value = formatNumber(r2_landVal);
+                        rows[1].querySelector(".calc-build-val").value = formatNumber(r2_build);
+                        rows[1].querySelector(".calc-total").value = formatNumber(r2_total);
+
+                        // --- STEP 3: Process Mouza Value (Row 2) - Independent ---
+                        const r3_area = parseFloat(rows[2].querySelector(".calc-land-area").value) || 0;
+                        const r3_rate = getRawValue(rows[2].querySelector(".calc-rate"));
+                        const r3_build = getRawValue(rows[2].querySelector(".calc-build-val"));
+
+                        const r3_landVal = r3_area * r3_rate;
+                        const r3_total = r3_landVal + r3_build;
+
+                        rows[2].querySelector(".calc-land-val").value = formatNumber(r3_landVal);
+                        rows[2].querySelector(".calc-total").value = formatNumber(r3_total);
+                    }
+                </script>
                 <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
                 <p>Detail Report and necessary attachments are enclosed herewith for your record and perusal.</p>
                 
@@ -1314,18 +1383,7 @@ document.getElementById("year").addEventListener("input", function () {
 
     <script>
         // --- 1. CALCULATIONS ---
-        function calculateValuation() {
-            const rows = document.querySelectorAll("#valuation-table tr");
-            rows.forEach(row => {
-                const area = parseFloat(row.querySelector(".calc-land-area").value) || 0;
-                const rate = parseFloat(row.querySelector(".calc-rate").value) || 0;
-                const buildVal = parseFloat(row.querySelector(".calc-build-val").value) || 0;
-                const landVal = area * rate;
-                const totalVal = landVal + buildVal;
-                row.querySelector(".calc-land-val").value = landVal.toFixed(2);
-                row.querySelector(".calc-total").value = totalVal.toFixed(2);
-            });
-        }
+
         
         // --- 2. SYNC RECIPIENT INFO ---
         function syncRecipientData() {
