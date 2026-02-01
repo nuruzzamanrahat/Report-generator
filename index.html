@@ -643,7 +643,7 @@
                             <td><input type="text" class="calc-rate" oninput="formatAndCalculate(this)" placeholder="0"></td>
                             <td><input type="text" class="calc-land-val" readonly style="background: #f9f9f9;"></td>
                             <td><input type="text" class="calc-build-val" oninput="formatAndCalculate(this)" placeholder="0"></td>
-                            <td><input type="text" class="calc-total" readonly style="background: #f9f9f9; font-weight: bold;" id="present-tv1" oninput="sync(this, 'present-tv2')"></td>
+                            <td><input type="text" class="calc-total" readonly style="background: #f9f9f9; font-weight: bold;"></td>
                         </tr>
                         <tr style="background-color: #f2f2f2;">
                             <td>Forced Sale Value (20% less)</td>
@@ -731,6 +731,19 @@
 
                         rows[2].querySelector(".calc-land-val").value = formatNumber(r3_landVal);
                         rows[2].querySelector(".calc-total").value = formatNumber(r3_total);
+                    }
+                    // --- STEP 4: Sync to Summary Rows ---
+                    const formattedMarketTotal = formatNumber(r1_total);
+                    const formattedForcedTotal = formatNumber(r2_total);
+
+                    // Sync Present Market Value to the summary row
+                    if (document.getElementById('final-market-value')) {
+                        document.getElementById('final-market-value').value = formattedMarketTotal;
+                    }
+
+                    // Optional: Sync Forced Sale Value to a summary row if you have one
+                    if (document.getElementById('final-forced-value')) {
+                        document.getElementById('final-forced-value').value = formattedForcedTotal;
                     }
                 </script>
                 <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
@@ -915,12 +928,12 @@
                     <tr>
                         <th>Current Market Value</th>
                         <td>:</td>
-                        <td>BDT <input type="number" style="width: 80%; display: inline-block;" placeholder="Enter amount" id="present-tv2" oninput="sync(this, 'present-tv1')"></td>
+                        <td>BDT <input type="text" id="final-market-value" style="width: 80%; font-weight: bold;" readonly></td>
                     </tr>
                     <tr>
                         <th>Forced Sale Value</th>
                         <td>:</td>
-                        <td>BDT <input type="number" style="width: 80%; display: inline-block;" placeholder="Enter amount"></td>
+                        <td>BDT <input type="text" id="final-forced-value" style="width: 80%; font-weight: bold;" readonly></td>
                     </tr>
                     <tr>
                         <th>Deviation (Plinth)</th>
