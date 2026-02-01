@@ -731,19 +731,24 @@
 
                         rows[2].querySelector(".calc-land-val").value = formatNumber(r3_landVal);
                         rows[2].querySelector(".calc-total").value = formatNumber(r3_total);
-                    }
-                    // --- STEP 4: Sync to Summary Rows ---
-                    const formattedMarketTotal = formatNumber(r1_total);
-                    const formattedForcedTotal = formatNumber(r2_total);
+                        
+                        // --- STEP 4: SYNC TO SUMMARY ROWS ---
+    
+                        // 1. Get the formatted strings from the main table cells
+                        const marketTotalVal = rows[0].querySelector(".calc-total").value;
+                        const forcedTotalVal = rows[1].querySelector(".calc-total").value;
 
-                    // Sync Present Market Value to the summary row
-                    if (document.getElementById('final-market-value')) {
-                        document.getElementById('final-market-value').value = formattedMarketTotal;
-                    }
+                        // 2. Push those values to the summary input IDs
+                        const marketDisplay = document.getElementById('final-market-value');
+                        const forcedDisplay = document.getElementById('final-forced-value');
 
-                    // Optional: Sync Forced Sale Value to a summary row if you have one
-                    if (document.getElementById('final-forced-value')) {
-                        document.getElementById('final-forced-value').value = formattedForcedTotal;
+                        if (marketDisplay) {
+                            marketDisplay.value = marketTotalVal;
+                        }
+    
+                        if (forcedDisplay) {
+                            forcedDisplay.value = forcedTotalVal;
+                        }
                     }
                 </script>
                 <p>The report has been prepared based on our physical inspection, verification, necessary documents as provided by concern office/individual, local market analysis and assessment to the best of our knowledge.</p>
