@@ -737,24 +737,80 @@
                 <p>Detail Report and necessary attachments are enclosed herewith for your record and perusal.</p>
                 
                 <div style="margin: 30px 20px 0;">
-                    <table style="border: none;">
+                    <table style="border: none; width: 100%;">
                         <tr>
-                            <td style="border: none; width: 40%;">
-                                <div style="border-top: 1px solid #000; width: 80%; padding-top: 5px;">
-                                    <p style="font-weight: bold;">Engr. Abdullah Al Rafi</p>
-                                    <p>Executive- Inspection, Survey & Valuation</p>
+                            <td style="border: none; width: 45%;">
+                                <div style="border-top: 1px solid #000; width: 90%; padding-top: 5px;">
+                                    <p style="font-weight: bold;">
+                                        <select id="select-valuer-1" onchange="updateSignatureDetails(1)" style="font-family: inherit; font-size: inherit; font-weight: bold; border: none; width: 100%; background: transparent; outline: none; appearance: none;">
+                                            <option value="" disabled selected>Select Valuer 1</option>
+                                            <option value="Engr. Abdullah Al Rafi" data-designation="Executive,ISV">Engr. Abdullah Al Rafi</option>
+                                            <option value="Md Towhid Islam" data-designation="Senior Officer,ISV">Md Towhid Islam</option>
+                                            <option value="Alif Ahmed" data-designation="Assistant Executive,ISV">Alif Ahmed</option>
+                                            <option value="MD Junaid Hasan" data-designation="Officer,ISV">MD Junaid Hasan</option>
+                                            <option value="Utsha Kar Ork" data-designation="Sr. Officer,ISV">Utsha Kar Ork</option>
+                                            <option value="Sazzadur Rahman" data-designation="Senior Officer,ISV">Sazzadur Rahman</option>
+                                            <option value="Shahriar Alam" data-designation="Officer,ISV">Shahriar Alam</option>
+                                            <option value="Md Mesbah Uddin" data-designation="Manager,ISV">Md Mesbah Uddin</option>
+                                            <option value="Md. Sahed Alam" data-designation="Sr. Officer,ISV">Md. Sahed Alam</option>
+                                        </select>
+                                    </p>
+                                    <p>
+                                        <input type="text" id="desig-output-1" placeholder="Designation" 
+                                            style="border: none; width: 100%; font-family: inherit;" readonly>
+                                    </p>
                                 </div>
                             </td>
-                            <td style="border: none; width: 20%;"></td>
-                            <td style="border: none; width: 40%;">
-                                <div style="border-top: 1px solid #000; width: 80%; padding-top: 5px;">
-                                    <p style="font-weight: bold;">Md. Rashed Hossain</p>
-                                    <p>Manager & Unit-In-Charge: ISV</p>
+
+                            <td style="border: none; width: 10%;"></td>
+
+                            <td style="border: none; width: 45%;">
+                                <div style="border-top: 1px solid #000; width: 90%; padding-top: 5px;">
+                                    <p style="font-weight: bold;">
+                                        <select id="select-valuer-2" onchange="updateSignatureDetails(2)" 
+                                            style="font-family: inherit; font-size: inherit; font-weight: bold; border: none; width: 100%; background: transparent; outline: none; appearance: none;">
+                                            <option value="" disabled selected>Select Valuer 2</option>
+                                            <option value="Engr. Abdullah Al Rafi" data-designation="Executive,ISV">Engr. Abdullah Al Rafi</option>
+                                            <option value="Md Towhid Islam" data-designation="Senior Officer,ISV">Md Towhid Islam</option>
+                                            <option value="Alif Ahmed" data-designation="Assistant Executive,ISV">Alif Ahmed</option>
+                                            <option value="MD Junaid Hasan" data-designation="Officer,ISV">MD Junaid Hasan</option>
+                                            <option value="Utsha Kar Ork" data-designation="Sr. Officer,ISV">Utsha Kar Ork</option>
+                                            <option value="Sazzadur Rahman" data-designation="Senior Officer,ISV">Sazzadur Rahman</option>
+                                            <option value="Shahriar Alam" data-designation="Officer,ISV">Shahriar Alam</option>
+                                            <option value="Md Mesbah Uddin" data-designation="Manager,ISV">Md Mesbah Uddin</option>
+                                            <option value="Md. Sahed Alam" data-designation="Sr. Officer,ISV">Md. Sahed Alam</option>
+                                        </select>
+                                    </p>
+                                    <p>
+                                        <input type="text" id="desig-output-2" placeholder="Designation" 
+                                            style="border: none; width: 100%; font-family: inherit;" readonly>
+                                    </p>
                                 </div>
                             </td>
                         </tr>
                     </table>
                 </div>
+                <script>
+                    function updateSignatureDetails(num) {
+                        const dropdown = document.getElementById('select-valuer-' + num);
+                        const desigOutput = document.getElementById('desig-output-' + num);
+
+                        if (!dropdown || !desigOutput) return;
+
+                        const selectedOption = dropdown.options[dropdown.selectedIndex];
+                        const designationValue = selectedOption.getAttribute('data-designation');
+
+                        if (designationValue) {
+                            // Fill the designation field for the specific valuer (1 or 2)
+                            desigOutput.value = designationValue;
+
+                            // Ensure the width adjusts if you have the auto-grow script
+                            if (typeof adjustWidth === "function") {
+                                adjustWidth.call(desigOutput);
+                            }
+                        }
+                    }
+                </script>
                 <div class="two-column">
                     <div class="note">
                         <p><strong>Encl:</strong></p>
