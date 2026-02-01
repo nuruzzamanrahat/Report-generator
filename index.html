@@ -426,6 +426,22 @@
             .add-photo-placeholder { display: none; }
             .delete-photo-btn { display: none; }
         }
+                .auto-grow {
+            display: inline; /* Changed from inline-block to allow wrapping */
+            border: none;
+            outline: none;
+            font: inherit;
+            padding: 0 3px;
+            min-width: 2px;
+            background: transparent;
+            white-space: pre-wrap; /* Essential: keeps spaces and allows wrapping */
+            word-wrap: break-word;
+        }
+        
+        /* Optional: This adds the placeholder back since spans don't have one naturally */
+        .auto-grow:focus {
+            border-bottom: 1px solid #000; /* Line only appears when typing */
+        }
     </style>
 </head>
 <body>
@@ -448,7 +464,7 @@
                         <tr>
                             <th>Reference Account Name</th>
                             <td style="width: 10px">:</td>
-                            <td><input type="text" placeholder="Enter reference account name"></td>
+                            <td><input id="ref ac1" type="text" placeholder="Enter reference account name" oninput="sync(this, 'ref ac2')></td>
                         </tr>
                         <tr>
                             <th>Reference No.</th>
@@ -530,7 +546,7 @@
                         </tr>
                     </table>
                 </div>
-                /* AUTO FILL SURVEYOR DETAILS*/
+                <!---- AUTO FILL SURVEYOR DETAILS -------->
                 <script>
                     function autoFillSurveyorDetails() {
                         const dropdown = document.getElementById('surveyor-select');
@@ -593,13 +609,13 @@
                 </div>
                 
                 <div style="margin: 10px 0;">
-                    <p><strong>Subject: Inspection, Survey & Valuation Report on Land with Building</strong></p>
-                    <p><strong>Ref. A/C Name: <input type="text" style="width: 300px; display: inline-block; font-weight: bold;" placeholder="Enter A/C name"></strong></p>
+                    <p><strong>Subject: Inspection, Survey & Valuation Report on <span class="auto-grow" contenteditable="true" role="textbox" data-placeholder="Enter medium"></span></strong></p>
+                    <p><strong>Ref. A/C Name: <input id="ref ac2" type="text" placeholder="Enter reference account name" oninput="sync(this, 'ref ac1')></strong></p>
                 </div>
                 
                 <p>Dear Sir,</p>
                 <p>Greetings from AMK Associates Limited and Thank You very much for referring us!</p>
-                <p style="text-align: justify;">Pursuant to your communication through <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter medium">, dated: <input type="date" style="width: 100px; display: inline-block;"> by Mr./Ms. <input type="text" style="width: 100px; display: inline-block;" placeholder="Enter name">, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
+                <p style="text-align: justify;">Pursuant to your communication through <span class="auto-grow" contenteditable="true" role="textbox" data-placeholder="Enter medium"></span>, dated: <span class="auto-grow" contenteditable="true" role="textbox" data-placeholder="Date"></span> by <span class="auto-grow" contenteditable="true" role="textbox" data-placeholder="Enter name"></span>, we, AMK Associates Limited ("AMK") has conducted the inspection, survey and valuation. Summary of the valuation is as below:</p>
                 
                 <table>
                     <thead>
@@ -1317,6 +1333,10 @@ document.getElementById("year").addEventListener("input", function () {
             const addressInput = document.getElementById('input-recipient-address');
             document.getElementById('output-recipient-name').innerText = nameInput.value;
             document.getElementById('output-recipient-address').innerText = addressInput.value;
+        }
+        
+        function sync(source, targetId) {
+            document.getElementById(targetId).value = source.value;
         }
 
         // --- 3. PHOTO MANAGEMENT LOGIC ---
