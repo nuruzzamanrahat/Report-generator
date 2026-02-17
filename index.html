@@ -525,7 +525,7 @@
                                     <option value="Md. Sahed Alam" 
                                         data-designation="Senior Officer,ISV" 
                                         data-nid="287 252 2319" 
-                                        data-contact="017488-62821">Md Mesbah Uddin</option> 
+                                        data-contact="017488-62821">Md. Sahed Alam</option> 
                                 </select>
                             </td>
                         </tr>
@@ -889,27 +889,26 @@
                         <td><textarea placeholder="Enter details">AMK Associates Limited</textarea></td>
                     </tr>
                 </table>
-                
                 <table>
                     <tr>
                         <th style="width: 30%;">Surveyor Name</th>
                         <td style="width: 10px;">:</td>
-                        <td><input type="text" placeholder="Enter surveyor name"></td>
+                        <td><input type="text" id="target-name" placeholder="Enter surveyor name"></td>
                     </tr>
                     <tr>
                         <th>Designation</th>
                         <td>:</td>
-                        <td><input type="text" placeholder="Enter designation"></td>
+                        <td><input type="text" id="target-designation" placeholder="Enter designation"></td>
                     </tr>
                     <tr>
                         <th>NID Number</th>
                         <td>:</td>
-                        <td><input type="text" placeholder="Enter NID number"></td>
+                        <td><input type="text" id="target-nid" placeholder="Enter NID number"></td>
                     </tr>
                     <tr>
                         <th>Contact Number</th>
                         <td>:</td>
-                        <td><input type="text" placeholder="Enter contact number"></td>
+                        <td><input type="text" id="target-contact" placeholder="Enter contact number"></td>
                     </tr>
                 </table>
                 
@@ -1468,9 +1467,31 @@ document.getElementById("year").addEventListener("input", function () {
             document.getElementById('output-recipient-name').innerText = nameInput.value;
             document.getElementById('output-recipient-address').innerText = addressInput.value;
         }
-        
+        // --- 2.1 GENERAL SYNC FOR ANY TWO ROW ---
         function sync(source, targetId) {
             document.getElementById(targetId).value = source.value;
+        }
+        function autoFillSurveyorDetails() {
+        const dropdown = document.getElementById('surveyor-select');
+        const desigField = document.getElementById('sur-designation');
+        const nidField = document.getElementById('sur-nid');
+        const contactField = document.getElementById('sur-contact');
+
+        const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+        // 1. Fill the first table fields
+        desigField.value = selectedOption.getAttribute('data-designation') || "";
+        nidField.value = selectedOption.getAttribute('data-nid') || "";
+        contactField.value = selectedOption.getAttribute('data-contact') || "";
+
+        // 2. Sync to the second table
+        // Sync the Name (from the dropdown itself)
+        sync(dropdown, 'target-name'); 
+        
+        // Sync the others (from the hidden/readonly fields)
+        sync(desigField, 'target-designation');
+        sync(nidField, 'target-nid');
+        sync(contactField, 'target-contact');
         }
 
         // --- 3. PHOTO MANAGEMENT LOGIC ---
