@@ -610,7 +610,7 @@
                 
                 <div style="margin: 10px 0;">
                     <p><strong>Subject: Inspection, Survey & Valuation Report on <span class="auto-grow" contenteditable="true" role="textbox" data-placeholder="Enter medium"></span></strong></p>
-                    <p><strong>Ref. A/C Name: <input id="ref ac2" type="text" placeholder="Enter reference account name" oninput="sync(this, 'ref ac1')"  style="width: 70 %; display: inline; font-weight: bold; font-family: inherit;"></strong></p>
+                    <p><strong>Ref. A/C Name: <input id="ref ac2" type="text" placeholder="Enter reference account name" oninput="sync(this, 'ref ac1')"  style="width: 50 %; display: inline; font-weight: bold; font-family: inherit;"></strong></p>
                 </div>
                 
                 <p>Dear Sir,</p>
@@ -647,19 +647,19 @@
                         </tr>
                         <tr style="background-color: #f2f2f2;">
                             <td>Forced Sale Value (20% less)</td>
-                            <td><input type="number" class="calc-land-area" readonly></td>
-                            <td><input type="text" class="calc-rate" readonly></td>
-                            <td><input type="text" class="calc-land-val" readonly></td>
-                            <td><input type="text" class="calc-build-val" readonly></td>
-                            <td><input type="text" class="calc-total" readonly style="font-weight: bold;"></td>
+                            <td><input type="number" class="calc-land-area" style="text-align: center; " readonly></td>
+                            <td><input type="text" class="calc-rate" style="text-align: center; " readonly></td>
+                            <td><input type="text" class="calc-land-val" style="text-align: center; " readonly></td>
+                            <td><input type="text" class="calc-build-val" style="text-align: center; " readonly></td>
+                            <td><input type="text" class="calc-total" readonly style="font-weight: bold; text-align: center;"></td>
                         </tr>
                         <tr>
                             <td>Mouza Value</td>
-                            <td><input type="number" step="any" class="calc-land-area" oninput="calculateValuation()" placeholder="0.00"></td>
-                            <td><input type="text" class="calc-rate" oninput="formatAndCalculate(this)" placeholder="0"></td>
-                            <td><input type="text" class="calc-land-val" readonly style="background: #f9f9f9;"></td>
-                            <td><input type="text" class="calc-build-val" oninput="formatAndCalculate(this)" placeholder="0"></td>
-                            <td><input type="text" class="calc-total" readonly style="background: #f9f9f9; font-weight: bold;"></td>
+                            <td><input type="number" step="any" class="calc-land-area" oninput="calculateValuation()" placeholder="0.00" style="text-align: center; "></td>
+                            <td><input type="text" class="calc-rate" oninput="formatAndCalculate(this)" placeholder="0" style="text-align: center; "></td>
+                            <td><input type="text" class="calc-land-val" readonly style="background: #f9f9f9; text-align: center;"></td>
+                            <td><input type="text" class="calc-build-val" oninput="formatAndCalculate(this)" placeholder="0" style="text-align: center; "></td>
+                            <td><input type="text" class="calc-total" readonly style="background: #f9f9f9; font-weight: bold; text-align: center;"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -942,7 +942,7 @@
                     <tr>
                         <th>Deviation (Plinth)</th>
                         <td>:</td>
-                        <td><input type="number" style="width: 50px; display: inline-block;" placeholder="0"> %</td>
+                        <td><span class="auto-grow" contenteditable="true" role="textbox" data-placeholder="Enter medium"></span>%</td>
                     </tr>
                     <tr>
                         <th>Deviation (Floor)</th>
