@@ -163,7 +163,11 @@
             font-weight: bold;
             text-align: center;
         }
-        
+        .table-scroll {
+            width: 100%;
+            overflow-x: auto; /* Allows scrolling on screen */
+        }
+
         /* Input Styles */
         input[type="text"], 
         input[type="date"], 
@@ -233,9 +237,6 @@
             font-size: 12px;
         }
 
-        .table-scroll {
-            overflow-x: auto;
-        }
 
         /* --- PHOTO PAGE STYLES --- */
         .photo-page-content {
@@ -443,6 +444,26 @@
             border-bottom: 1px solid #000; /* Line only appears when typing */
         }
     </style>
+    
+<style>
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    /* Ensure tables don't break across pages awkwardly */
+    table {
+        page-break-inside: auto;
+    }
+    tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    /* Reset sticky position for print */
+    .controls {
+        position: static !important;
+    }
+}
+</style>
 </head>
 <body>
 
@@ -454,7 +475,7 @@
 
         <!-- ================= SHEET 1 ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h1 class="report-title">INSPECTION SURVEY & VALUATION REPORT</h1>
@@ -595,7 +616,7 @@
 
         <!-- ================= SHEET 2 ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <div style="margin: 20px 0;">
@@ -859,7 +880,7 @@
 
         <!-- ================= SHEET 3 ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>Summary of the Valuation Report</h2>
@@ -959,7 +980,7 @@
 
         <!-- ================= SHEET 4 (Sections A & B) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>A. Particulars of Account:</h2>
@@ -992,7 +1013,7 @@
 
         <!-- ================= SHEET 5 (Sections C & D) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>C. Schedule of Property:</h2>
@@ -1044,7 +1065,7 @@
 
         <!-- ================= SHEET 6 (Section E) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>E. Other Features of Property:</h2>
@@ -1080,7 +1101,7 @@
 
         <!-- ================= SHEET 7 (Section F) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>F. Civil Construction of Property:</h2>
@@ -1090,14 +1111,14 @@
                     <tr>
                         <th>Number of Stories</th><td>:</td>
                         <td>
-                            As per Plan: <input type="number" style="width: 60px; display: inline-block;" placeholder="0"> Storied<br>
-                            As per Physical: <input type="number" style="width: 60px; display: inline-block;" placeholder="0"> Storied
+                            As per Plan: <span class="auto-grow" contenteditable="true" role="textbox"></span> Storied<br>
+                            As per Physical: <span class="auto-grow" contenteditable="true" role="textbox"></span> Storied
                         </td>
                     </tr>
                     <tr><th>Approval Authority</th><td>:</td><td><input type="text"></td></tr>
-                    <tr><th>Plan No. & Date</th><td>:</td><td>Sarok: <input type="text" style="width: 30%; display: inline-block;">, Date: <input type="date" style="width: 30%; display: inline-block;"></td></tr>
+                    <tr><th>Plan No. & Date</th><td>:</td><td>Sarok number: <span class="auto-grow" contenteditable="true" role="textbox"></span>, Date: <input type="date" style="width: 30%; display: inline-block;"></td></tr>
                     <tr><th>Occupancy Category</th><td>:</td><td><input type="text"></td></tr>
-                    <tr><th>Age of Structure</th><td>:</td><td><input type="number" style="width: 60px; display: inline-block;"> Years</td></tr>
+                    <tr><th>Age of Structure</th><td>:</td><td><span class="auto-grow" contenteditable="true" role="textbox"></span> Years</td></tr>
                     <tr><th>Shape of Building</th><td>:</td><td><input type="text"></td></tr>
                     <tr><th>Project Name</th><td>:</td><td><input type="text"></td></tr>
                     <tr><th>Developer's Name</th><td>:</td><td><input type="text"></td></tr>
@@ -1118,11 +1139,11 @@
 
         <!-- ================= SHEET 8 (Floors + G + H) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <div class="table-scroll">
-                    <table>
+                    <table id="table1">
                         <tr>
                             <th>Floor</th>
                             <th>Area as per Plan (Sft.)</th>
@@ -1130,45 +1151,43 @@
                             <th>Deviation (Sft.)</th>
                             <th>Deviation (%)</th>
                         </tr>
-                        <tr><th>Ground Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>1<sup>st</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>2<sup>nd</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>3<sup>rd</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>4<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>5<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>6<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>7<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>8<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                        <tr><th>9<sup>th</sup> Floor</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        <tr>
+                            <th>Ground Floor</th>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                            <td><input type="text"></td>
+                        </tr>
                     </table>
                 </div>
 
                 <div class="table-scroll">
-                    <table>
+                    <table id="table2">
                         <thead>
                             <tr>
-                                <th>Particulars</th>
-                                <th>Ground Floor</th>
-                                <th>1<sup>st</sup> Floor</th>
-                                <th>2<sup>nd</sup> Floor</th>
-                                <th>3<sup>rd</sup> Floor</th>
-                                <th>4<sup>th</sup> Floor</th>
-                                <th>5<sup>th</sup> Floor</th>
-                                <th>6<sup>th</sup> Floor</th>
-                                <th>7<sup>th</sup> Floor</th>
-                                <th>8<sup>th</sup> Floor</th>
-                                <th>9<sup>th</sup> Floor</th>                         
+                                <th style="width: 10%;">Floor</th>
+                                <th>Unit per Floor (Plan)</th>
+                                <th>Unit per Floor (Physical)</th>
+                                <th>Number of Room</th>
+                                <th>Number of Bathroom</th>
+                                <th>No of Balcony</th>
+                                <th>No of Drawing Room</th>
+                                <th>No of Dining Room</th>
+                                <th>Drawing Cum Dining</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><th>Unit per Floor (Plan)</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>Unit per Floor (Physical)</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>Number of Room</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>Number of  Bathroom</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>No of Balcony</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>No of Drawing Room</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>No of Dining Room</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                            <tr><th>Drawing Cum Dainning</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                            <tr>
+                                <th>Ground Floor</th>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                                <td><input type="text"></td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -1179,7 +1198,7 @@
 
         <!-- ================= SHEET 9 (Price & Dec) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>G. Setback Comparison:</h2>
@@ -1203,200 +1222,82 @@
                 </table>
                 <h2>H. Construction Percentage:</h2>
                 <div class="table-scroll">
-                    <table>
-                       <tr>
-                           <th>Floor</th><th>Structure</th><th>Brick</th><th>Wood</th><th>Metal</th><th>Plumbing <br>& sanitary</th><th>Electrical</th><th>Plaster</th><th>General <br> Floor</th><th>Aluminium</th><th>Paint</th><th>Work<br>Completion %</th>
-                       </tr>
-                       <tr><th>Ground</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>1st</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>2nd</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>3rd</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>4th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>5th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>6th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>7th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>8th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                       <tr><th>9th</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
-                   </table>
+                    <table id="workCompletionTable">
+                        <thead>
+                            <tr>
+                                <th>Floor</th><th>Structure</th><th>Brick</th><th>Wood</th><th>Metal</th>
+                                <th>Plumbing <br>& sanitary</th><th>Electrical</th><th>Plaster</th>
+                                <th>General <br> Floor</th><th>Aluminium</th><th>Paint</th><th>Work<br>Completion %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><th>Ground</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <img src="AKM Footer.png" class="report-footer-img" alt="Footer" crossorigin="anonymous">
         </div>
         <!-- ================= SHEET 9 (Price & Dec) ================= -->
         <div class="sheet">
-            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>I. Floor-wise Building Value:</h2>
-                <table >
-        <thead>
-            <tr>
-                <th rowspan="3">Floor</th>
-                <th colspan="2">Area (Sft.)</th>
-                <th rowspan="2">Present Construction Cost per Sft. (BDT) </th>
-                <th colspan="2">Estimated Value (BDT) for 100% completion of Construction</th>
-                <th rowspan="2">Work Completion (%) till date </th>
-                <th colspan="2">Present Value (BDT)</th>
-            </tr>
-            <tr>
-                <th>As per Plan </th>
-                <th>As per Physical Inspection</th>
-                <th>As per Plan</th>
-                <th>As per Physical Inspection</th>
-                <th>As per Plan</th>
-                <th>As per Physical Inspection</th>
-            </tr>
-            <tr>
-                <th>a</th>
-                <th>b</th>
-                <th>c</th>
-                <th>d=a*c</th>
-                <th>e=b*c</th>
-                <th>f</th>
-                <th>g=d*f</th>
-                <th>h=e*f</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-            <td>Foundation</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>Ground Fl.</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>1st Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>2nd Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>3rd Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>4th Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>5th Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>6th Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>7th Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>8th Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td>9th Floor</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr><th colspan="4">Total Value of the Building <sup>1</sup></th>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr>
-            <td colspan="7">Depreciation <sup>2</sup> @ <input type="text" placeholder="Enter Values in percentage">%</td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-            <tr><th colspan="7">Net Value of the Building</th>
-            <td><input type="text" placeholder="Enter Values"></td>
-            <td><input type="text" placeholder="Enter Values"></td>
-            </tr>
-        </tbody>
-    </table>
+
+                <table id="costCalculationTable">
+                    <thead>
+                        <tr>
+                            <th rowspan="3">Floor</th>
+                            <th colspan="2">Area (Sft.)</th>
+                            <th rowspan="2">Present Construction Cost per Sft. (BDT) </th>
+                            <th colspan="2">Estimated Value (BDT) for 100% completion</th>
+                            <th rowspan="2">Work Completion (%) till date </th>
+                            <th colspan="2">Present Value (BDT)</th>
+                        </tr>
+                        <tr>
+                            <th>As per Plan </th>
+                            <th>As per Physical Inspection</th>
+                            <th>As per Plan</th>
+                            <th>As per Physical Inspection</th>
+                            <th>As per Plan</th>
+                            <th>As per Physical Inspection</th>
+                        </tr>
+                        <tr>
+                            <th>a</th><th>b</th><th>c</th><th>d=a*c</th><th>e=b*c</th><th>f</th><th>g=d*f</th><th>h=e*f</th>
+                        </tr>
+                    </thead>
+                    <tbody id="costBody">
+                        <tr>
+                            <td>Foundation</td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                        </tr>
+                        <tr>
+                            <td>Ground Fl.</td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                        </tr>
+                    </tbody>
+                    <tfoot id="costFoot">
+                        <tr>
+                            <th colspan="4">Total Value of the Building <sup>1</sup></th>
+                            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">Depreciation <sup>2</sup> @ <input type="text" style="width:40px">%</td>
+                            <td><input type="text"></td><td><input type="text"></td>
+                        </tr>
+                        <tr>
+                            <th colspan="7">Net Value of the Building</th>
+                            <td><input type="text"></td><td><input type="text"></td>
+                        </tr>
+                    </tfoot>
+                </table>
     <p>*Note:
         <ol>
             <li>Note: Building value has been considered based on Approved Plan and construction cost as per current market standards. </li>
@@ -1551,7 +1452,7 @@ document.getElementById("year").addEventListener("input", function () {
                 sheet.className = 'sheet photo-sheet-dynamic';
                 
                 sheet.innerHTML = `
-                    <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+                    < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
                     <div class="sheet-content photo-page-content" id="photo-sheet-content-${i}">
                         <div class="annexure-header">
                             ${i === 0 ? 'Annexure-I: Photograph of Property' : 'Annexure-I: Photograph of Property (Contd.)'}
@@ -1708,6 +1609,62 @@ document.getElementById("year").addEventListener("input", function () {
                 renderPhotoSheets();
             }
         }
+        
+        // --- 7. ADDING ROW TO THE TABLES ---
+        function getFloorLabel(index) {
+    if (index === 0) return "Ground Floor";
+    let j = index % 10, k = index % 100;
+    let suffix = "th";
+    if (j == 1 && k != 11) suffix = "st";
+    else if (j == 2 && k != 12) suffix = "nd";
+    else if (j == 3 && k != 13) suffix = "rd";
+    return index + "<sup>" + suffix + "</sup> Floor";
+}
+
+function universalAddFloor() {
+    // 1. Table 1 (Standard Rows)
+    const t1 = document.getElementById("table1");
+    const t1Index = t1.rows.length - 1;
+    const row1 = t1.insertRow(-1);
+    row1.innerHTML = `<th>${getFloorLabel(t1Index)}</th>` + '<td><input type="text"></td>'.repeat(4);
+
+    // 2. Table 2 (NOW TRANSPOSED - Adding Rows)
+    const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
+    const t2Index = t2Body.rows.length;
+    const row2 = t2Body.insertRow(-1);
+    row2.innerHTML = `<th>${getFloorLabel(t2Index)}</th>` + '<td><input type="text"></td>'.repeat(8);
+
+    // 3. Work Completion Table
+    const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
+    const tWorkIndex = tWork.rows.length;
+    const rowWork = tWork.insertRow(-1);
+    rowWork.innerHTML = `<th>${getFloorLabel(tWorkIndex)}</th>` + '<td><input type="text"></td>'.repeat(11);
+
+    // 4. Cost Calculation Table
+    const tCost = document.getElementById("costBody");
+    const tCostIndex = tCost.rows.length - 1; // Accounting for Foundation row
+    const rowCost = tCost.insertRow(-1);
+    rowCost.innerHTML = `<td>${getFloorLabel(tCostIndex)}</td>` + '<td><input type="text" placeholder="Value"></td>'.repeat(8);
+}
+
+function universalRemoveFloor() {
+    // Table 1
+    const t1 = document.getElementById("table1");
+    if (t1.rows.length > 2) t1.deleteRow(-1);
+
+    // Table 2 (Transposed)
+    const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
+    if (t2Body.rows.length > 1) t2Body.deleteRow(-1);
+
+    // Work Completion
+    const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
+    if (tWork.rows.length > 1) tWork.deleteRow(-1);
+
+    // Cost Calculation
+    const tCost = document.getElementById("costBody");
+    if (tCost.rows.length > 2) tCost.deleteRow(-1);
+}
+
     </script>
 
 //_________WEBHOOK____________
