@@ -1139,8 +1139,12 @@
 
         <!-- ================= SHEET 8 (Floors + G + H) ================= -->
         <div class="sheet">
-            < img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
-            
+            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <div class="controls no-print" style="position: sticky; top: 10px; background: white; padding: 10px; z-index: 100; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
+                <strong>Building Scale:</strong>
+                <button type="button" onclick="universalAddFloor()" style="padding: 5px 15px; cursor: pointer; background: #e7f3ff; border: 1px solid #007bff; border-radius: 4px;">+ Add One Floor (All Tables)</button>
+                <button type="button" onclick="universalRemoveFloor()" style="padding: 5px 15px; cursor: pointer; background: #fff0f0; border: 1px solid #dc3545; border-radius: 4px;">- Remove Last Floor (All Tables)</button>
+            </div>
             <div class="sheet-content">
                 <div class="table-scroll">
                     <table id="table1">
