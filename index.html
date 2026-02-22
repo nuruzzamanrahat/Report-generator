@@ -454,7 +454,7 @@
 
         <!-- ================= SHEET 1 ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h1 class="report-title">INSPECTION SURVEY & VALUATION REPORT</h1>
@@ -595,7 +595,7 @@
 
         <!-- ================= SHEET 2 ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <div style="margin: 20px 0;">
@@ -842,6 +842,8 @@
                         </ol>
                     </div>
                     <div class="note">
+                        <br>
+                        <br>
                         <ol start="5">
                             <li>Annexure-V: QR Code for video</li>
                             <li>Annexure-VI: QR Code for Map</li>
@@ -857,7 +859,7 @@
 
         <!-- ================= SHEET 3 ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>Summary of the Valuation Report</h2>
@@ -957,7 +959,7 @@
 
         <!-- ================= SHEET 4 (Sections A & B) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>A. Particulars of Account:</h2>
@@ -990,7 +992,7 @@
 
         <!-- ================= SHEET 5 (Sections C & D) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>C. Schedule of Property:</h2>
@@ -1042,7 +1044,7 @@
 
         <!-- ================= SHEET 6 (Section E) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>E. Other Features of Property:</h2>
@@ -1078,7 +1080,7 @@
 
         <!-- ================= SHEET 7 (Section F) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>F. Civil Construction of Property:</h2>
@@ -1116,7 +1118,7 @@
 
         <!-- ================= SHEET 8 (Floors + G + H) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <div class="table-scroll">
@@ -1177,7 +1179,7 @@
 
         <!-- ================= SHEET 9 (Price & Dec) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>G. Setback Comparison:</h2>
@@ -1222,7 +1224,7 @@
         </div>
         <!-- ================= SHEET 9 (Price & Dec) ================= -->
         <div class="sheet">
-            <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+            <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
             
             <div class="sheet-content">
                 <h2>I. Floor-wise Building Value:</h2>
@@ -1549,7 +1551,7 @@ document.getElementById("year").addEventListener("input", function () {
                 sheet.className = 'sheet photo-sheet-dynamic';
                 
                 sheet.innerHTML = `
-                    <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
+                    <! img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
                     <div class="sheet-content photo-page-content" id="photo-sheet-content-${i}">
                         <div class="annexure-header">
                             ${i === 0 ? 'Annexure-I: Photograph of Property' : 'Annexure-I: Photograph of Property (Contd.)'}
@@ -1678,9 +1680,9 @@ document.getElementById("year").addEventListener("input", function () {
 
             const opt = {
                 margin:       0, 
-                filename:     'EBL_Valuation_Report.pdf',
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, scrollY: 0 },
+                filename:     'EBL Valuation Report.pdf',
+                image:        { type: 'jpeg', quality: 1.0 },
+                html2canvas:  { scale: 3, useCORS: true, scrollY: 0 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak:    { mode: 'css' } 
             };
