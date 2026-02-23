@@ -301,8 +301,8 @@
             font-size: 40px;
             margin-bottom: 10px;
         }
-/*---------------------------------------------------------------------*/
-        /* DELETE BUTTON STYLES FIXED */
+        
+        /* DELETE BUTTON STYLES  */
         .delete-photo-btn {
             position: absolute;
             top: 5px;
@@ -426,6 +426,10 @@
             .control-bar { display: none; }
             .add-photo-placeholder { display: none; }
             .delete-photo-btn { display: none; }
+            .no-print {display: none !important;} /* new line*/
+            .controls {position: static !important;} /* new line*/
+            table {page-break-inside: auto;}  /* new line*/
+            tr { page-break-inside: avoid; page-break-after: auto;}  /* new line*/
         }
                 .auto-grow {
             display: inline; /* Changed from inline-block to allow wrapping */
