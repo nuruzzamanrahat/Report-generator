@@ -443,28 +443,6 @@
         .auto-grow:focus {
             border-bottom: 1px solid #000; /* Line only appears when typing */
         }
-        .no-print {
-            display: none !important;
-        } /*NEW LINE*/
-    </style>
-    <style>
-        @media print {
-            .no-print {
-                display: none !important;
-            }
-            /* Ensure tables don't break across pages awkwardly */
-            table {
-                page-break-inside: auto;
-            }
-            tr {
-                page-break-inside: avoid;
-                page-break-after: auto;
-            }
-            /* Reset sticky position for print */
-            .controls {
-                position: static !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -1142,11 +1120,6 @@
         <!-- ================= SHEET 8 (Floors + G + H) ================= -->
         <div class="sheet">
             <img src="AMK Header.png" class="report-header-img" alt="Header" crossorigin="anonymous">
-            <div class="controls no-print" style="position: sticky; top: 10px; background: white; padding: 10px; z-index: 100; border-bottom: 1px solid #ccc; margin-bottom: 20px;">
-                <strong>Building Scale:</strong>
-                <button type="button" onclick="universalAddFloor()" style="padding: 5px 15px; cursor: pointer; background: #e7f3ff; border: 1px solid #007bff; border-radius: 4px;">+ Add One Floor (All Tables)</button>
-                <button type="button" onclick="universalRemoveFloor()" style="padding: 5px 15px; cursor: pointer; background: #fff0f0; border: 1px solid #dc3545; border-radius: 4px;">- Remove Last Floor (All Tables)</button>
-            </div>
             <div class="sheet-content">
                 <div class="table-scroll">
                     <table id="table1">
@@ -1351,6 +1324,12 @@ document.getElementById("year").addEventListener("input", function () {
 
     <!-- CONTROL BAR -->
     <div class="control-bar">
+        <button type="button" class="btn btn-add" onclick="universalAddFloor()">
+            <i class="fas fa-plus"></i> Add One Floor
+        </button>
+        <button type="button" class="btn btn-remove" onclick="universalRemoveFloor()">
+            <i class="fas fa-minus"></i> Remove Last Floor
+        </button>
         <button class="btn btn-preview" onclick="togglePreview()" id="btn-preview">
             <i class="fas fa-eye"></i> Preview
         </button>
@@ -1547,12 +1526,7 @@ document.getElementById("year").addEventListener("input", function () {
             
             // Select the control buttons container
             const controls = document.querySelector('.controls.no-print');
-    
-            // 1. Hide the buttons specifically before capture
-            if (controls) controls.style.setProperty('display', 'none', 'important');
-            
             wrapper.classList.add('pdf-mode');
-
             const inputs = element.querySelectorAll('input, textarea, select');
             const originalDisplay = [];
 
@@ -1601,11 +1575,7 @@ document.getElementById("year").addEventListener("input", function () {
             };
 
             html2pdf().set(opt).from(element).save().then(function() {
-                wrapper.classList.remove('pdf-mode');
-                
-                // 2. Bring the buttons back for the user to continue editing
-                if (controls) controls.style.display = 'block';
-                
+                wrapper.classList.remove('pdf-mode');  
                 const replacements = element.querySelectorAll('.pdf-text-replacement');
                 replacements.forEach(span => span.remove());
                 inputs.forEach((input, index) => {
