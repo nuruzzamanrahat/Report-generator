@@ -426,10 +426,6 @@
             .control-bar { display: none; }
             .add-photo-placeholder { display: none; }
             .delete-photo-btn { display: none; }
-            .no-print {display: none !important;} /* new line*/
-            .controls {position: static !important;} /* new line*/
-            table {page-break-inside: auto;}  /* new line*/
-            tr { page-break-inside: avoid; page-break-after: auto;}  /* new line*/
         }
                 .auto-grow {
             display: inline; /* Changed from inline-block to allow wrapping */
@@ -447,27 +443,29 @@
         .auto-grow:focus {
             border-bottom: 1px solid #000; /* Line only appears when typing */
         }
+        .no-print {
+            display: none !important;
+        } /*NEW LINE*/
     </style>
-    
-<style>
-@media print {
-    .no-print {
-        display: none !important;
-    }
-    /* Ensure tables don't break across pages awkwardly */
-    table {
-        page-break-inside: auto;
-    }
-    tr {
-        page-break-inside: avoid;
-        page-break-after: auto;
-    }
-    /* Reset sticky position for print */
-    .controls {
-        position: static !important;
-    }
-}
-</style>
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            /* Ensure tables don't break across pages awkwardly */
+            table {
+                page-break-inside: auto;
+            }
+            tr {
+                page-break-inside: avoid;
+                page-break-after: auto;
+            }
+            /* Reset sticky position for print */
+            .controls {
+                position: static !important;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -1547,6 +1545,12 @@ document.getElementById("year").addEventListener("input", function () {
             const element = document.getElementById('report-content');
             const wrapper = document.querySelector('.report-wrapper');
             
+            // Select the control buttons container
+            const controls = document.querySelector('.controls.no-print');
+    
+            // 1. Hide the buttons specifically before capture
+            if (controls) controls.style.setProperty('display', 'none', 'important');
+            
             wrapper.classList.add('pdf-mode');
 
             const inputs = element.querySelectorAll('input, textarea, select');
@@ -1598,6 +1602,10 @@ document.getElementById("year").addEventListener("input", function () {
 
             html2pdf().set(opt).from(element).save().then(function() {
                 wrapper.classList.remove('pdf-mode');
+                
+                // 2. Bring the buttons back for the user to continue editing
+                if (controls) controls.style.display = 'block';
+                
                 const replacements = element.querySelectorAll('.pdf-text-replacement');
                 replacements.forEach(span => span.remove());
                 inputs.forEach((input, index) => {
@@ -1620,58 +1628,57 @@ document.getElementById("year").addEventListener("input", function () {
         
         // --- 7. ADDING ROW TO THE TABLES ---
         function getFloorLabel(index) {
-    if (index === 0) return "Ground Floor";
-    let j = index % 10, k = index % 100;
-    let suffix = "th";
-    if (j == 1 && k != 11) suffix = "st";
-    else if (j == 2 && k != 12) suffix = "nd";
-    else if (j == 3 && k != 13) suffix = "rd";
-    return index + "<sup>" + suffix + "</sup> Floor";
-}
+            if (index === 0) return "Ground Floor";
+            let j = index % 10, k = index % 100;
+            let suffix = "th";
+            if (j == 1 && k != 11) suffix = "st";
+            else if (j == 2 && k != 12) suffix = "nd";
+            else if (j == 3 && k != 13) suffix = "rd";
+            return index + "<sup>" + suffix + "</sup> Floor";
+        }
+        
+        function universalAddFloor() {
+            // 1. Table 1 (Standard Rows)
+            const t1 = document.getElementById("table1");
+            const t1Index = t1.rows.length - 1;
+            const row1 = t1.insertRow(-1);
+            row1.innerHTML = `<th>${getFloorLabel(t1Index)}</th>` + '<td><input type="text"></td>'.repeat(4);
 
-function universalAddFloor() {
-    // 1. Table 1 (Standard Rows)
-    const t1 = document.getElementById("table1");
-    const t1Index = t1.rows.length - 1;
-    const row1 = t1.insertRow(-1);
-    row1.innerHTML = `<th>${getFloorLabel(t1Index)}</th>` + '<td><input type="text"></td>'.repeat(4);
+            // 2. Table 2 (NOW TRANSPOSED - Adding Rows)
+            const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
+            const t2Index = t2Body.rows.length;
+            const row2 = t2Body.insertRow(-1);
+            row2.innerHTML = `<th>${getFloorLabel(t2Index)}</th>` + '<td><input type="text"></td>'.repeat(8);
 
-    // 2. Table 2 (NOW TRANSPOSED - Adding Rows)
-    const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
-    const t2Index = t2Body.rows.length;
-    const row2 = t2Body.insertRow(-1);
-    row2.innerHTML = `<th>${getFloorLabel(t2Index)}</th>` + '<td><input type="text"></td>'.repeat(8);
+            // 3. Work Completion Table
+            const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
+            const tWorkIndex = tWork.rows.length;
+            const rowWork = tWork.insertRow(-1);
+            rowWork.innerHTML = `<th>${getFloorLabel(tWorkIndex)}</th>` + '<td><input type="text"></td>'.repeat(11);
 
-    // 3. Work Completion Table
-    const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
-    const tWorkIndex = tWork.rows.length;
-    const rowWork = tWork.insertRow(-1);
-    rowWork.innerHTML = `<th>${getFloorLabel(tWorkIndex)}</th>` + '<td><input type="text"></td>'.repeat(11);
+            // 4. Cost Calculation Table
+            const tCost = document.getElementById("costBody");
+            const tCostIndex = tCost.rows.length - 1; // Accounting for Foundation row
+            const rowCost = tCost.insertRow(-1);
+            rowCost.innerHTML = `<td>${getFloorLabel(tCostIndex)}</td>` + '<td><input type="text" placeholder="Value"></td>'.repeat(8);
+        }
+        function universalRemoveFloor() {
+            // Table 1
+            const t1 = document.getElementById("table1");
+            if (t1.rows.length > 2) t1.deleteRow(-1);
 
-    // 4. Cost Calculation Table
-    const tCost = document.getElementById("costBody");
-    const tCostIndex = tCost.rows.length - 1; // Accounting for Foundation row
-    const rowCost = tCost.insertRow(-1);
-    rowCost.innerHTML = `<td>${getFloorLabel(tCostIndex)}</td>` + '<td><input type="text" placeholder="Value"></td>'.repeat(8);
-}
+            // Table 2 (Transposed)
+            const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
+            if (t2Body.rows.length > 1) t2Body.deleteRow(-1);
 
-function universalRemoveFloor() {
-    // Table 1
-    const t1 = document.getElementById("table1");
-    if (t1.rows.length > 2) t1.deleteRow(-1);
+            // Work Completion
+            const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
+            if (tWork.rows.length > 1) tWork.deleteRow(-1);
 
-    // Table 2 (Transposed)
-    const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
-    if (t2Body.rows.length > 1) t2Body.deleteRow(-1);
-
-    // Work Completion
-    const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
-    if (tWork.rows.length > 1) tWork.deleteRow(-1);
-
-    // Cost Calculation
-    const tCost = document.getElementById("costBody");
-    if (tCost.rows.length > 2) tCost.deleteRow(-1);
-}
+            // Cost Calculation
+            const tCost = document.getElementById("costBody");
+            if (tCost.rows.length > 2) tCost.deleteRow(-1);
+        }
 
     </script>
 
