@@ -1634,25 +1634,25 @@ document.getElementById("year").addEventListener("input", function () {
             const t1 = document.getElementById("table1");
             const t1Index = t1.rows.length - 1;
             const row1 = t1.insertRow(-1);
-            row1.innerHTML = `<th>${getFloorLabel(t1Index)}</th>` + '<td><input type="text"></td>'.repeat(4);
+            row1.innerHTML = `<th>${getFloorLabel(t1Index)}</th>` + '<td class="td-center"><input type="text"></td>'.repeat(4);
 
             // 2. Table 2 (NOW TRANSPOSED - Adding Rows)
             const t2Body = document.getElementById("table2").getElementsByTagName('tbody')[0];
             const t2Index = t2Body.rows.length;
             const row2 = t2Body.insertRow(-1);
-            row2.innerHTML = `<th>${getFloorLabel(t2Index)}</th>` + '<td><input type="text"></td>'.repeat(8);
+            row2.innerHTML = `<th>${getFloorLabel(t2Index)}</th>` + '<td class="td-center"><input type="text"></td>'.repeat(8);
 
             // 3. Work Completion Table
             const tWork = document.getElementById("workCompletionTable").getElementsByTagName('tbody')[0];
             const tWorkIndex = tWork.rows.length;
             const rowWork = tWork.insertRow(-1);
-            rowWork.innerHTML = `<th>${getFloorLabel(tWorkIndex)}</th>` + '<td><input type="text"></td>'.repeat(11);
+            rowWork.innerHTML = `<th>${getFloorLabel(tWorkIndex)}</th>` + '<td class="td-center"><input type="text"></td>'.repeat(11);
 
             // 4. Cost Calculation Table
             const tCost = document.getElementById("costBody");
             const tCostIndex = tCost.rows.length - 1; // Accounting for Foundation row
             const rowCost = tCost.insertRow(-1);
-            rowCost.innerHTML = `<td>${getFloorLabel(tCostIndex)}</td>` + '<td><input type="text" placeholder="Value"></td>'.repeat(8);
+            rowCost.innerHTML = `<td>${getFloorLabel(tCostIndex)}</td>` + '<td class="td-center"><input type="text" placeholder="Value"></td>'.repeat(8);
         }
         function universalRemoveFloor() {
             // Table 1
@@ -1673,24 +1673,5 @@ document.getElementById("year").addEventListener("input", function () {
         }
 
     </script>
-
-//_________WEBHOOK____________
-async function submitReport(data) {
-  const res = await fetch(
-    "https://amkadvisory.app.n8n.cloud/webhook/report-input",
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    }
-  );
-
-  if (!res.ok) {
-    alert("Submission failed");
-  } else {
-    alert("Report data saved successfully");
-  }
-}
-//____________________________
 </body>
 </html>
