@@ -163,6 +163,14 @@
             font-weight: bold;
             text-align: center;
         }
+        /* Special class for centered cells */
+        .td-center {
+            text-align: center !important;
+        }
+        /* Optional: Centers the typing cursor inside the input as well */
+        .td-center input {
+            text-align: center;
+        }
         .table-scroll {
             width: 100%;
             overflow-x: auto; /* Allows scrolling on screen */
@@ -416,6 +424,8 @@
         .btn-download { background-color: #27ae60; }
         .btn-clear { background-color: #e74c3c; }
         .btn-edit { background-color: #f39c12; display: none; }
+        .btn-add { background-color: #27ae60; }
+        .btn-remove { background-color: #e74c3c; }
 
         /* --- PRINT STYLES --- */
         @media print {
@@ -1132,10 +1142,10 @@
                         </tr>
                         <tr>
                             <th>Ground Floor</th>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
-                            <td><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
                         </tr>
                     </table>
                 </div>
@@ -1158,14 +1168,14 @@
                         <tbody>
                             <tr>
                                 <th>Ground Floor</th>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
-                                <td><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
+                                <td class="td-center"><input type="text"></td>
                             </tr>
                         </tbody>
                     </table>
@@ -1191,12 +1201,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr><th>North</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>South</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>East</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>West</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>Road (N/S)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
-                    <tr><th>Road (E/W)</th><td><input type="number"></td><td><input type="number"></td><td><input type="number"></td></tr>
+                    <tr><th>North</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
+                    <tr><th>South</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
+                    <tr><th>East</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
+                    <tr><th>West</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
+                    <tr><th>Road (N/S)</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
+                    <tr><th>Road (E/W)</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
                 </tbody>
                 </table>
                 <h2>H. Construction Percentage:</h2>
@@ -1210,7 +1220,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr><th>Ground</th><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td></tr>
+                            <tr><th>Ground</th><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td><td class="td-center"><input type="text"></td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -1249,23 +1259,35 @@
                     <tbody id="costBody">
                         <tr>
                             <td>Foundation</td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
                         </tr>
                         <tr>
                             <td>Ground Fl.</td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
-                            <td><input type="text" placeholder="Value"></td><td><input type="text" placeholder="Value"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
                         </tr>
                     </tbody>
                     <tfoot id="costFoot">
                         <tr>
                             <th colspan="4">Total Value of the Building <sup>1</sup></th>
-                            <td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td><td><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
+                            <td class="td-center"><input type="text"></td>
                         </tr>
                         <tr>
                             <td colspan="7">Depreciation <sup>2</sup> @ <input type="text" style="width:40px">%</td>
