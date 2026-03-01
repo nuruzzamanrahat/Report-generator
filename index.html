@@ -1671,6 +1671,128 @@ document.getElementById("year").addEventListener("input", function () {
             const tCost = document.getElementById("costBody");
             if (tCost.rows.length > 2) tCost.deleteRow(-1);
         }
+        // --- 8. CALCULATION LOGIC FOR ALL THE TABLES ---
+/** * CONSOLIDATED CALCULATION & COMMA FORMATTING LOGIC */
+
+// Helper: Remove commas to get a clean number for math
+function getRawValue(input) {
+    if (!input || !input.value) return 0;
+    return parseFloat(input.value.replace(/,/g, '')) || 0;
+}
+
+// Helper: Add commas back for display
+function formatWithCommas(num, decimals = 0) {
+    if (isNaN(num)) return "0";
+    return num.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: decimals
+    });
+}
+
+document.addEventListener('input', function (e) {
+    const target = e.target;
+
+    // 1. AREA DEVIATION (Sheet 8)
+    if (target.closest('#table1')) {
+        const row = target.closest('tr');
+        const plan = getRawValue(row.cells[1].querySelector('input'));
+        const phys = getRawValue(row.cells[2].querySelector('input'));
+        
+        const devSft = phys - plan;
+        const devPct = plan !== 0 ? (devSft / plan) * 100 : 0;
+
+        // Format inputs and results
+        if (target.type === 'text') target.value = formatWithCommas(getRawValue(target), 2);
+        row.cells[3].querySelector('input').value = formatWithCommas(devSft, 2);
+        row.cells[4].querySelector('input').value = devPct.toFixed(2) + "%";
+    }
+
+    // 2. SETBACK DEVIATION (Sheet 9 - Section G)
+    if (target.closest('table') && target.closest('table').previousElementSibling?.innerText?.includes('G. Setback')) {
+        const row = target.closest('tr');
+        const plan = getRawValue(row.cells[1].querySelector('input'));
+        const phys = getRawValue(row.cells[2].querySelector('input'));
+        
+        target.value = formatWithCommas(getRawValue(target), 2);
+        row.cells[3].querySelector('input').value = formatWithCommas(phys - plan, 2);
+    }
+
+    // 3. CONSTRUCTION WORK % (Sheet 9 - Section H)
+    // Weights: Structure(37), Brick(9), Wood(7), Metal(4), Plumbing(8), Elec(9), Plaster(6), Floor(8), Alum(6), Paint(6)
+    if (target.closest('#workCompletionTable')) {
+        const weights = [37, 9, 7, 4, 8, 9, 6, 8, 6, 6];
+        const row = target.closest('tr');
+        const inputs = row.querySelectorAll('input');
+        let total = 0;
+
+        for (let i = 0; i < weights.length; i++) {
+            let val = getRawValue(inputs[i]);
+            if (val > 100) val = 100; // Cap single category at 100%
+            total += (val / 100) * weights[i];
+        }
+        inputs[10].value = total.toFixed(2);
+        
+        // Auto-sync the result to the Cost Table on Sheet 10
+        updateCostTableFromCompletion(row.rowIndex, total.toFixed(2));
+    }
+
+    // 4. FLOOR-WISE BUILDING VALUE (Sheet 10)
+    if (target.closest('#costCalculationTable') || target.id === 'year') {
+        calculateBuildingValueTable();
+    }
+});
+
+function calculateBuildingValueTable() {
+    const rows = document.querySelectorAll('#costBody tr');
+    let totalG = 0, totalH = 0;
+
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length < 8) return;
+
+        const a = getRawValue(inputs[0]); // Area Plan
+        const b = getRawValue(inputs[1]); // Area Phys
+        const c = getRawValue(inputs[2]); // Cost/Sft
+        const f = getRawValue(inputs[5]) / 100; // Completion %
+
+        const d = a * c; // Est Plan
+        const e = b * c; // Est Phys
+        const g = d * f; // Present Plan
+        const h = e * f; // Present Phys
+
+        inputs[3].value = formatWithCommas(d);
+        inputs[4].value = formatWithCommas(e);
+        inputs[6].value = formatWithCommas(g);
+        inputs[7].value = formatWithCommas(h);
+
+        totalG += g; totalH += h;
+    });
+
+    // Update Totals & Depreciation
+    const footInputs = document.querySelectorAll('#costFoot input');
+    footInputs[3].value = formatWithCommas(totalG);
+    footInputs[4].value = formatWithCommas(totalH);
+
+    const depPercent = parseFloat(document.getElementById('percent').value) || 0;
+    const depG = (totalG * depPercent) / 100;
+    const depH = (totalH * depPercent) / 100;
+
+    // footInputs[6,7] are Depreciation; [8,9] are Net Value
+    footInputs[6].value = formatWithCommas(depG);
+    footInputs[7].value = formatWithCommas(depH);
+    footInputs[8].value = formatWithCommas(totalG - depG);
+    footInputs[9].value = formatWithCommas(totalH - depH);
+}
+
+function updateCostTableFromCompletion(rowIndex, percentage) {
+    const costBody = document.getElementById('costBody');
+    const costRow = costBody?.rows[rowIndex - 1];
+    if (costRow) {
+        const completionInput = costRow.querySelectorAll('input')[5];
+        completionInput.value = percentage;
+        calculateBuildingValueTable(); 
+    }
+}
 
     </script>
 </body>
