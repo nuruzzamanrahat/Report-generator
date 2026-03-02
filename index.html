@@ -453,6 +453,7 @@
         .auto-grow:focus {
             border-bottom: 1px solid #000; /* Line only appears when typing */
         }
+        ol { font-size: 12px; }
     </style>
 </head>
 <body>
@@ -1290,7 +1291,7 @@
                             <td class="td-center"><input type="text"></td>
                         </tr>
                         <tr>
-                            <td colspan="7">Depreciation <sup>2</sup> @ <input type="text" style="width:40px">%</td>
+                            <td colspan="7">Depreciation <sup>2</sup> @ <span class="auto-grow" contenteditable="true" role="textbox"></span>%</td>
                             <td><input type="text"></td><td><input type="text"></td>
                         </tr>
                         <tr>
@@ -1306,8 +1307,7 @@
         </ol>
     </p>
     <p>
-    As this structure is 
-    <input id="year" type="number" style="width: 40px; display: inline-block;">-year-old, 
+    As this structure is <span class="auto-grow" contenteditable="true" role="textbox"></span>-year-old, 
     thus the Depreciation is considered as (100/70) × 
     <input id="year2" type="text" style="width: 40px; display: inline-block;" readonly> 
     = 
@@ -1730,10 +1730,10 @@ document.addEventListener('input', function (e) {
             if (val > 100) val = 100; // Cap single category at 100%
             total += (val / 100) * weights[i];
         }
-        inputs[10].value = total.toFixed(2);
+        const integerTotal = Math.round(total); 
+        inputs[10].value = integerTotal;
         
-        // Auto-sync the result to the Cost Table on Sheet 10
-        updateCostTableFromCompletion(row.rowIndex, total.toFixed(2));
+        updateCostTableFromCompletion(row.rowIndex, integerTotal);
     }
 
     // 4. FLOOR-WISE BUILDING VALUE (Sheet 10)
