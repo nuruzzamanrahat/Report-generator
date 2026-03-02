@@ -1744,7 +1744,7 @@ document.addEventListener('input', function (e) {
 
 function calculateBuildingValueTable() {
     const rows = document.querySelectorAll('#costBody tr');
-    let totalG = 0, totalH = 0;
+    let totalD = 0, totalE = 0, totalG = 0, totalH = 0;
 
     rows.forEach(row => {
         const inputs = row.querySelectorAll('input');
@@ -1765,11 +1765,13 @@ function calculateBuildingValueTable() {
         inputs[6].value = formatWithCommas(g);
         inputs[7].value = formatWithCommas(h);
 
-        totalG += g; totalH += h;
+        totalD += d; totalE += e; totalG += g; totalH += h;
     });
 
     // Update Totals & Depreciation
     const footInputs = document.querySelectorAll('#costFoot input');
+    footInputs[0].value = formatWithCommas(totalD);
+    footInputs[1].value = formatWithCommas(totalE);
     footInputs[3].value = formatWithCommas(totalG);
     footInputs[4].value = formatWithCommas(totalH);
 
