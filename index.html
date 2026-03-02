@@ -1672,22 +1672,22 @@ document.getElementById("year").addEventListener("input", function () {
             if (tCost.rows.length > 2) tCost.deleteRow(-1);
         }
         // --- 8. CALCULATION LOGIC FOR ALL THE TABLES ---
-/** * CONSOLIDATED CALCULATION & COMMA FORMATTING LOGIC */
-
-// Helper: Remove commas to get a clean number for math
-function getRawValue(input) {
-    if (!input || !input.value) return 0;
-    return parseFloat(input.value.replace(/,/g, '')) || 0;
-}
-
-// Helper: Add commas back for display
-function formatWithCommas(num, decimals = 0) {
-    if (isNaN(num)) return "0";
-    return num.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: decimals
-    });
-}
+        
+        /** * CONSOLIDATED CALCULATION & COMMA FORMATTING LOGIC */
+        // Helper: Remove commas to get a clean number for math
+        function getRawValue(input) {
+            if (!input || !input.value) return 0;
+            return parseFloat(input.value.replace(/,/g, '')) || 0;
+        }
+        
+        // Helper: Add commas back for display
+        function formatWithCommas(num, decimals = 0) {
+            if (isNaN(num)) return "0";
+            return num.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: decimals
+            });
+        }
 
 document.addEventListener('input', function (e) {
     const target = e.target;
@@ -1730,7 +1730,7 @@ document.addEventListener('input', function (e) {
             if (val > 100) val = 100; // Cap single category at 100%
             total += (val / 100) * weights[i];
         }
-        const integerTotal = Math.round(total); 
+        const integerTotal = Math.ceil(total); 
         inputs[10].value = integerTotal;
         
         updateCostTableFromCompletion(row.rowIndex, integerTotal);
